@@ -1,0 +1,78 @@
+﻿@model About
+@{
+    ViewData["Title"] = "AboutUs";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <!--About Us-->
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">About Us</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Up Title
+                                    </th>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        Down Title
+                                    </th>
+                                    <th>
+                                        Info
+                                    </th>
+                                    <th>
+                                        @if (Model == null)
+                                        {
+                                            <a asp-area="admin" asp-controller="aboutpage" asp-action="createAboutUs" class="btn btn-success btn-rounded btn-fw">Create About Us</a>
+                                        }
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img style="border-radius: 0; height:100px !important; width:auto !important" src="~/Uploads/Images/@Model.Image" alt="Image" />
+                                    </td>
+                                    <td>
+                                        @(Model.UpTitle != null? Model.UpTitle:"")
+                                    </td>
+                                    <td>
+                                        @(Model.Title != null? Model.Title : "")
+
+                                    </td>
+                                    <td>
+                                        @(Model.DownTitle != null? Model.DownTitle : "")
+
+                                    </td>
+                                    <td>
+                                        @Html.Raw(Model.Text != null ? Model.Text : "")
+
+                                    </td>
+                                    <td>
+                                        @if (Model != null)
+                                        {
+                                            <a asp-area="admin" asp-controller="aboutpage" asp-action="updateAboutUs" asp-route-id="@Model.Id" class="btn btn-warning" title="Update"><i class="mdi mdi-update"></i></a>
+                                            <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="aboutpage" asp-action="deleteAboutUs" asp-route-id="@Model.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

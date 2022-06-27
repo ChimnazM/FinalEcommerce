@@ -1,0 +1,189 @@
+﻿@model VmAddToCart
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal subtotal = 0;
+    decimal tax = 0;
+    decimal ordertotal = 0;
+
+}
+
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Cart</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a asp-controller="shop" asp-action="index">Shop</a>
+                        </li>
+                        <li class="breadcrumb-item active">Cart</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="card-section">
+    <div class="container">
+        <div class="row g-0 main-row">
+            <div class="col-12 col-lg-9">
+
+                @if (Model.Products.FirstOrDefault() != null)
+                {
+                    <div class="add-card-box">
+                        <div class="add-header">
+                            <div class="row g-0">
+                                <div class="col-5 col-sm-6 d-flex p-2">
+                                    <h1>Product</h1>
+                                </div>
+                                <div class="col col-sm-1 p-2">
+                                    <h2>Price</h2>
+                                </div>
+                                <div class="col col-sm-3 p-2">
+                                    <h3>Quantity</h3>
+                                </div>
+                                <div class="col col-sm-1 p-2">
+                                    <h4>Total</h4>
+                                </div>
+                                <div class="col-0 col-sm-1 p-2"></div>
+                            </div>
+                        </div>
+                        <div class="add-main">
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="row g-0 card-added-prd-item" style="border-bottom: 1px solid #d1d1d1;">
+                                    <div class="col-5 col-sm-6 add-prd-info-checkbox p-2">
+                                        <div class="add-prd-info">
+                                            <div class="add-prd-img">
+                                                <a asp-controller="shop" asp-action="details" asp-route-id="@item.ProductId">
+                                                    <img src="~/Uploads/Images/Product/@item.Image" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="add-prd-content">
+                                                <a asp-controller="shop" asp-action="details" asp-route-id="@item.ProductId">
+                                                    <h1>@item.Name</h1>
+                                                </a>
+
+                                                <div class="add-prd-color">
+                                                    @foreach (var color in item.Colors)
+                                                    {
+                                                        if (color.Id == item.ColorId)
+                                                        {
+                                            <span data-colorid="@color.Id" data-productid="@item.ProductId" data-typeid="@item.TypeId" class="m-1 add-cart-color-btn active" style="background-color: @color.Name;"><i style="color: @(color.Name =="white"?"black":"")" class="fas fa-check"></i></span> }
+                                                                    else
+                                                                    {
+                                            <span data-colorid="@color.Id" data-productid="@item.ProductId" data-typeid="@item.TypeId" class="m-1 add-cart-color-btn" style="background-color: @color.Name;"><i class="fas fa-check d-none"></i></span>}
+                                                                }
+                                                </div>
+
+                                                <!--Sizes-->
+                                                <div class="add-prd-size mt-2">
+                                                    <ul style="height: 24px">
+                                                        @foreach (var size in item.Sizes)
+                                                        {
+                                            <li id="@size.Id" data-sizeid="@size.Id" data-typeid="@item.TypeId" class="@(size.Id == item.SizeId?"active":"") d-none">@size.Name</li>}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-sm-1 add-price">
+                                        <strong>$@item.Price.ToString("0.00")</strong>
+                                    </div>
+                                    <div class="col col-sm-3 add-quantity">
+                                        <form action="">
+                                            <div class="spinner-cart">
+                                                <div class="spinner-prev-cart"><i class="fas fa-minus"></i></div>
+                                                <input type="number" name="" data-typeid="@item.TypeId" data-price="@item.Price" class="number-spinner-cart" value="@item.Quantity">
+                                                <div data-max="@item.MaxQuantity" class="spinner-next-cart"><i class="fas fa-plus"></i></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col col-sm-1 add-prd-total">
+                                        <strong>$@((item.Quantity * item.Price).ToString("0.00"))</strong>
+                                    </div>
+                                    <div class="col-0 col-sm-1 add-prd-delete">
+                                        <a data-typeid="@item.TypeId" class="add-cart-delete-btn"><span><i class="fas fa-trash-alt fa-lg"></i></span></a>
+                                    </div>
+
+                                    <div class="hidden-delete-btn">
+                                        <a data-typeid="@item.TypeId" class="add-cart-delete-btn">
+                                            <i class="far fa-times-circle fa-2x"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                }
+                else
+                {   
+                    <div>
+                        <p style="font-size: 20px">Cart is empty</p>
+                    </div>
+                }
+            </div>
+            <div class="col-12 col-lg-3">
+                <div class="totals mx-lg-2">
+                    <h2>Cart Totals:</h2>
+                    <table class="table table-responsive cart-total-table">
+                        <tbody>
+                            <tr>
+                                <td>Subtotal:</td>
+                                @if (Model.Products.FirstOrDefault() != null)
+                                {
+                                    
+                                    foreach (var item in Model.Products)
+                                    {
+                                        subtotal += item.Price * item.Quantity;
+                                    }
+                                    if (subtotal < Model.Tax.PriceLimit)
+                                    {
+                                        tax = subtotal * Model.Tax.Percent / 100;
+                                        ordertotal = subtotal + tax;
+                                    }
+                                    else
+                                    {
+                                        ordertotal = subtotal;
+                                    }
+                                    
+                                }
+
+                                <td><strong id="subtotal">$@(Model.Products.FirstOrDefault() != null?subtotal.ToString("0.00"):"0.00")</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Other Tax:</td>
+                                <td><strong id="tax">$@(Model.Products.FirstOrDefault() != null? tax.ToString("0.00") :"0.00")</strong></td>
+                            </tr>
+                            @*<tr>
+                                <td>Shipping:</td>
+                                <td><strong>@(Model.Products.FirstOrDefault() != null ? "Free": "$0.00")</strong></td>
+                            </tr>*@
+                            <tr class="final-total">
+                                <td>Order Total:</td>
+                                <td><strong id="orderTotal">$@(Model.Products.FirstOrDefault() != null ? ordertotal.ToString("0.00"):"0.00")</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="checkout-btn @(Model.Products.FirstOrDefault() == null ?"d-none":"")">
+                        <a asp-controller="shop" asp-action="checkout" class="animate-button close">Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

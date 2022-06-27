@@ -1,0 +1,67 @@
+﻿@model Advertisement
+@{
+    ViewData["Title"] = "Trend";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Trend</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Up Title
+                                    </th>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        Down Title
+                                    </th>
+                                    <th>
+                                        @if (Model == null)
+                                        {
+                                            <a asp-area="admin" asp-controller="homepage" asp-action="createTrend" class="btn btn-success btn-rounded btn-fw">Create New Trend</a>
+                                        }
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img style="width: auto !important; height:70px !important; border-radius: 0" src="~/Uploads/Images/@Model.Image" alt="image">
+                                    </td>
+                                    <td>
+                                        @(Model.UpTitle != null? Model.UpTitle:"")
+                                    </td>
+                                    <td>
+                                        @(Model.Title != null? Model.Title : "")
+
+                                    </td>
+                                    <td>
+                                        @(Model.DownTitle != null? Model.DownTitle : "")
+
+                                    </td>
+                                    <td>
+                                        <a asp-area="admin" asp-controller="homepage" asp-action="updateTrend" asp-route-id="@Model.Id" class="btn btn-warning" title="Update"><i class="mdi mdi-update"></i></a>
+                                        <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="homepage" asp-action="deleteTrend" asp-route-id="@Model.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

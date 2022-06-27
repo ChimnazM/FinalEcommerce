@@ -1,0 +1,476 @@
+﻿@model VmShop
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@{ ViewData["Title"] = "Details"; }
+
+<!-- Bread Crumb -->
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Product Detail</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a asp-controller="shop" asp-action="index">Shop</a>
+                        </li>
+                        <li class="breadcrumb-item active">@Model.Product.Name</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Details -->
+<section class="details">
+    <div class="container">
+        <div class="row g-0 detail-main">
+            <div class="col-md-6 mb-4 mb-md-0">
+
+                <!--Product Image-->
+                <div class="detail-images">
+                    <!--Main image box-->
+                    <div class="imgBox">
+                        <div class="nested-image-box">
+                            <img src="~/Uploads/Images/Product/@Model.ProductImages.FirstOrDefault().Image">
+                        </div>
+                    </div>
+
+                    <!--Mini images-->
+                    <div class="mini-image-box-control">
+                        @if (Model.ProductImages.Count > 4)
+                        {
+            <button id="detail-prev"><i class="fas fa-chevron-left fa-lg"></i></button>}
+                        <ul data-owlCarousel class="mini-image-box owl-theme">
+                            @foreach (var item in Model.ProductImages)
+                            {
+                <li>
+                    <a>
+                        <img data-img-color="@item.Color.Name.ToLower()" class="mini-img" src="~/Uploads/Images/Product/@item.Image" alt="">
+                    </a>
+                </li>}
+
+                        </ul>
+                        @if (Model.ProductImages.Count > 4)
+                        {
+            <button id="detail-next"><i class="fas fa-chevron-right fa-lg"></i></button>}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="detail-content">
+                    <!--Product Name-->
+                    <h1 class="product-title prd-toast-name">@Model.Product.Name</h1>
+
+                    <!--Product Price and Rating-->
+                    <div class="price-and-review">
+                        <!--Product Price-->
+                        <div class="price">
+                             @if (Model.Product.AllInfoToProducts.Any(d => d.DiscountPrice > 0 && d.DiscountDeadline > DateTime.Now))
+                             {
+                                <span class="old-price">$@(Model.Product.AllInfoToProducts.FirstOrDefault().Price)</span>
+                                <strong class="new-price">$@(Model.Product.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice)</strong> 
+                             }
+                             else
+                             {
+                                 <strong class="new-price">$@(Model.Product.AllInfoToProducts.FirstOrDefault().Price)</strong>
+                             }
+                        </div>
+
+                        <!--Product Rating-->
+                        <div class="rating-box">
+                            @{ 
+                                decimal ratingSum = 0;
+                                decimal ratingCount = 0;
+                                int ratingAverage = 0;
+                                foreach (var comment in Model.Product.Comments)
+                                {
+                                    ratingSum += comment.Rating;
+                                    ratingCount++;
+                                }
+                                if (ratingCount != 0)
+                                {
+                                    ratingAverage = Convert.ToInt32(Math.Ceiling(ratingSum / ratingCount));
+
+                                }
+                                else
+                                {
+                                    ratingAverage = 0;
+                                }
+
+                                <div class="stars">
+                                 @for (int i = 1; i <= 5; i++)
+                                 {
+                                     if (i <= ratingAverage)
+                                     {
+                                         <span><i class="fas fa-star"></i></span> 
+                                     }
+                                     else
+                                     {
+                                         <span><i class="far fa-star"></i></span>
+                                     }
+                                 }
+                                </div> 
+                                }
+
+
+                            <div class="rating px-2">
+                                <span class="raiting-number">(@ratingCount)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Product Description-->
+                    <div class="product-info">
+                        <p>@(Model.Product.Desc!= null? Model.Product.Desc:"")</p>
+                    </div>
+
+                    <!--Features-->
+                    <div class="product-sort-info">
+                        <ul>
+                            @foreach (var item in Model.Product.ProductFeatures)
+                            {
+                                <li><i class="fas fa-shield-alt"></i><span>@item.Name</span></li>
+                            }
+                        </ul>
+                    </div>
+
+                    @if (Model.AllInfoToProducts.FirstOrDefault(a=>a.Quantity > 0) == null)
+                    {
+                        <p style="font-weight:bold; color: #ff324d">This Product not exist in the stock</p>
+                    }
+                    else
+                    {
+                     <!--Verbs-->
+                     <div class="event-box">
+                        <!--Quantity control-->
+                        <form action="">
+                            <div class="spinner">
+                                <div class="spinner-prev"><i class="fas fa-minus"></i></div>
+                                <input type="number" min="1" max="100" class="number-spinner" value="1">
+                                <div class="spinner-next"><i class="fas fa-plus"></i></div>
+                            </div>
+                        </form>
+
+
+                        <!--Add to cart-->
+                        <div class="add-to-cart">
+                            <button data-productid="@Model.Product.Id" data-typeid="" class="close animate-button add-to-card-detail-btn">Add To Cart</button>
+                        </div>
+
+                        <!--Add to wishlist-->
+                        <div class="add-wishlist">
+                            <a title="Add to Wishlist" data-productid="@Model.Product.Id" data-typeid="" class="add-to-wishlist-detail-btn" data-id="0" data-quantity="0" style="cursor: pointer"><i class="far fa-heart fa-2x"></i></a>
+                        </div>
+                    </div>
+                     
+                     <!--Colors-->
+                     <div class="color-box">
+                        <h3>Color:</h3>
+                        <div class="detail-prd-color">
+
+                            @foreach (var item in Model.Colors)
+                            {
+                                <span data-colorid="@item.Id" data-productid="@Model.Product.Id" data-btn-color="@item.Name.ToLower()" title="@item.Name" class="m-1  @item.Name.ToLower() @(item.AllInfoToProducts.Any(p=>p.ProductId == Model.Product.Id && p.Quantity > 0)==false?"not-allowed":"")" style="background-color: @item.Name.ToLower(); cursor: @(item.AllInfoToProducts.Any(p=>p.ProductId == Model.Product.Id && p.Quantity > 0)==false?"not-allowed":"pointer");"><i class="fas fa-check"></i></span>}
+
+                        </div>
+                    </div>
+                     
+                     <!--Sizes-->
+                     <div class="size-box">
+                        <h4>Size:</h4>
+                        <div class="detail-prd-size">
+                            <ul>
+                                @foreach (var item in Model.Sizes)
+                                {
+                                  <li data-productid="@Model.Product.Id" data-sizeid="@item.Id" id="@item.Id" class="@(item.AllInfoToProducts.Any(s=>s.Quantity > 0) == false ?"not-allowed":"") @( item.Id == Model.Product.AllInfoToProducts.FirstOrDefault(q=>q.Quantity > 0).SizeId?"active":"")" style="cursor: @(item.AllInfoToProducts.Any(s=>s.Quantity > 0)  == false ?"not-allowed":"pointer");"><a>@item.Name</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    }
+
+
+                    <!--Category-->
+                    <div class="additional-info">
+                        <p>Category: <strong>@Model.Categories.FirstOrDefault(c => c.Id == Model.Product.CategoryId).Name</strong></p>
+                    </div>
+
+                    <!--Social Share-->
+                    <div class="share-product">
+                        <span>Share:</span>
+                        <ul>
+                            <li><a title="Share on Facebook" class="facebook-btn" href=""><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a title="Share on Twitter" class="twitter-btn" href=""><i class="fab fa-twitter"></i></a></li>
+                            <li><a title="Share on Pinterest" class="pinterest-btn" href=""><i class="fab fa-pinterest"></i></a></li>
+                            <li><a title="Share on LinkedIn" class="linkedin-btn" href=""><i class="fab fa-linkedin"></i></a></li>
+                            <li><a title="Share on Tumblr" class="tumblr-btn" href=""><i class="fab fa-tumblr"></i></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row helper">
+            <div class="col-md-12">
+                <!--Details Tab-->
+                <div class="tabs">
+                    <ul>
+                        <li><button id="desc" class="active">Description</button></li>
+                        <li><button id="review" class="">Reviews <span>(@Model.Comments.Count)</span></button></li>
+                    </ul>
+                </div>
+                <div class="interactive-content">
+                    <!--Description-->
+                    <div class="description">
+                        @Html.Raw(Model.ProductDescription != null ? Model.ProductDescription.Text:"")
+                    </div>
+
+                    <!--Comments-->
+                    <div class="reviews d-none">
+                        <ol>
+                            <li>
+                                @foreach (var item in Model.Comments)
+                                {
+                                    <div class="row comment-item">
+                                        <!--Comment Image-->
+                                        <div class="col-3 col-sm-2 col-md-1">
+                                            <div class="commenter-image">
+                                            @if (item.CustomUser.Image != null)
+                                            {
+                                                <img src="~/Uploads/Images/User/@item.CustomUser.Image" alt=""> 
+                                            }
+                                            else
+                                            {
+                                                <img src="https://png.pngtree.com/png-vector/20191101/ourlarge/pngtree-businessman-avatar-icon-flat-style-png-image_1917273.jpg" alt="">
+                                            }
+                                        </div>
+                                    </div>
+
+                                        <!--Comment Content-->
+                                        <div class="col-9 col-sm-10 col-md-11">
+                                            <div class="comment-header">
+                                                <strong class="commenter-name">@item.CustomUser.Name @item.CustomUser.Surname</strong>
+                                                <div class="rating-box-and-date">
+                                                    <div class="stars">
+                                                    @for (int i = 0; i < item.Rating; i++)
+                                                    {
+                                                        <span><i class="fas fa-star"></i></span>
+                                                    }
+                                                    @for (int i = 0; i < (5 - item.Rating); i++)
+                                                    {
+                                                        <span><i class="far fa-star"></i></span>
+                                                    }
+                                                </div>
+                                                    <div class="date">
+                                                        <p>@item.AddedDate.ToString("MMMM dd,yyyy")</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="comment-text">
+                                                <p>@item.Text</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </li>
+                        </ol>
+
+                    </div>
+                    @if (SignInManager.IsSignedIn(User))
+                    {   <!--Write Comment-->
+                        <div class="write-comment d-none">
+                            <h5 class="mb-3">Add a review</h5>
+                            <div class="comment-review-rating">
+                                <strong>Your rating *</strong>
+                                <div class="comment-stars  py-2">
+                                    <span id="s1"><i class="far fa-star fa-lg"></i></span>
+                                    <span id="s2"><i class="far fa-star fa-lg"></i></span>
+                                    <span id="s3"><i class="far fa-star fa-lg"></i></span>
+                                    <span id="s4"><i class="far fa-star fa-lg"></i></span>
+                                    <span id="s5"><i class="far fa-star fa-lg"></i></span>
+                                </div>
+                            </div>
+                            <!-- Write Comment -->
+                            <form asp-controller="shop" asp-action="CreateComment" method="post">
+                                <div class="mb-3">
+                                    <label for="comment" class="form-label">Your review *</label>
+                                    <textarea name="Text" class="form-control" id="comment" rows="3"></textarea>
+                                </div>
+                                <input type="hidden" id="comment-star" name="Rating" value="0" />
+                                <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                                <div class="row g-0">
+                                    <div class="col-6 pb-3">
+                                        <div class="form-group">
+                                            <button asp-controller="shop" asp-action="CreateComment" type="submit" class="close animate-button">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                     }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="hider card-section g-0">
+    <div class=" container-fluid  owl-carousel-cards g-0">
+        <!--Start Card Header -->
+        <div class="row g-0 pb-3">
+            <div class="cards-title">
+                <h1>@Model.Universals.Where(s => s.Section == "Related").FirstOrDefault().Title</h1>
+            </div>
+        </div>
+
+        <!-- End Card Header -->
+        <div class="
+            row
+            g-0
+            owl-card-items
+            d-flex
+          ">
+            <div id="owl-demo" data-owlCarousel class="owl-cards col-10 order-2 owl-carousel d-flex owl-theme">
+                @foreach (var item in Model.FeaturedProducts)
+                {
+                    var categoryClass = item.Category.Name.Split(" ");
+                    string datafilterClass = string.Join("-", categoryClass).ToLower();
+
+                    <div class="m-2 my-3 item">
+
+                        <div class="product-image-box">
+                            @if (Model.FeaturedAllInfoToProducts.Any(p => p.ProductId == item.Id))
+                            {
+                                @if (item.AllInfoToProducts.Any(d => d.DiscountPrice > 0))
+                                {
+                                    <span class="discount">
+                                        -@(Decimal.Round(((1 - item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice / item.AllInfoToProducts.FirstOrDefault().Price) * 100)))%
+                                    </span>
+                                }
+                            }
+
+
+                            <div class="product-img">
+                                @if (Model.FeaturedProductImages.Any(i => i.ProductId == item.Id))
+                                {
+                                    <img src="~/Uploads/Images/Product/@item.ProductImages.FirstOrDefault().Image"
+                                         class="card-img-top"
+                                         alt="..." />
+                                }
+                            </div>
+
+                            <div class="image-buttons">
+                                <ul>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to card"
+                                           class="add-to-card-index-btn">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="Go details"
+                                           asp-controller="shop" asp-action="details" asp-route-id="@item.Id">
+                                            <i class="fas fa-search-plus"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to wishlist"
+                                           class="add-to-wishlist-index-btn">
+                                            <i class="fas fa-heart"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="product-title"><a asp-controller="shop" asp-action="details" asp-route-id="@item.Id">@(item.Name != null?item.Name:"")</a></h5>
+                            <div class="price-box">
+                                @if (item.AllInfoToProducts.FirstOrDefault().DiscountDeadline > DateTime.Now)
+                                {
+                                     <span class="old-price-related">$@item.AllInfoToProducts.FirstOrDefault().Price</span>
+                                     <span class="price-related"> $@item.AllInfoToProducts.FirstOrDefault().DiscountPrice</span>
+                                }
+                                else
+                                {
+                                     <span class="price-related">$@item.AllInfoToProducts.FirstOrDefault().Price</span>
+                                }
+                            </div>
+                            <div class="rating-box">
+                                @{
+                                    int ratingSum1 = 0;
+                                    int ratingCount1 = 0;
+                                    int ratingAverage1 = 0;
+                                    foreach (var product in Model.Comments.Where(p => p.ProductId == item.Id))
+                                    {
+                                        ratingSum1 += product.Rating;
+                                        ratingCount1++;
+                                    }
+                                    if (ratingCount1 != 0)
+                                    {
+                                        ratingAverage1 = ratingSum1 / ratingCount1;
+
+                                    }
+                                    else
+                                    {
+                                        ratingAverage1 = 0;
+                                    }
+
+
+                                    <div class="stars">
+                                        @for (int i = 0; i < ratingAverage1; i++)
+                                        {
+                                            <span><i class="fas fa-star"></i></span>
+
+                                        }
+                                        @for (int i = 0; i < (5 - ratingAverage1); i++)
+                                        {
+                                            <span><i class="far fa-star"></i></span>
+
+                                        }
+                                    </div>
+
+                                }
+
+
+                                <div class="rating px-2">
+                                    <span class="raiting-number">(@ratingCount1)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+
+            <div class="prev owl-arrow col-1 order-1">
+                <a id="owl-prev"><i class='fas fa-chevron-left fa-2x'></i></a>
+            </div>
+
+            <div class="next  owl-arrow col-1 order-3 ms-auto">
+                <a id="owl-next"><i class='fas fa-chevron-right fa-2x'></i></a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@*<script>
+    //ckeditor
+    CKEDITOR.replace('Message');
+</script>*@

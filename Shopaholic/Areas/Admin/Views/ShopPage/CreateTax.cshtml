@@ -1,0 +1,37 @@
+﻿@model Tax
+@{
+    ViewData["Title"] = "CreateTax";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create Tax</h4>
+
+                    <form asp-area="admin" asp-controller="shoppage" asp-action="CreateTax" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.PriceLimit" for="pricelimit">Price Limit</label>
+                            <input asp-for="@Model.PriceLimit" class="form-control" id="pricelimit" placeholder="Price Limit">
+                            <span class="text-danger" asp-validation-for="@Model.PriceLimit"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Percent" for="percent">Percent</label>
+                            <input asp-for="@Model.Percent"  class="form-control" id="percent" placeholder="Percent">
+                            <span class="text-danger" asp-validation-for="@Model.Percent"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="shoppage" asp-action="tax" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

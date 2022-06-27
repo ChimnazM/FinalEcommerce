@@ -1,0 +1,82 @@
+﻿@model List<VmSale>
+@{
+    ViewData["Title"] = "Sale";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Sales</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        InvoiceNo
+                                    </th>
+                                    <th>
+                                        Client Name
+                                    </th>
+                                    <th>
+                                        Shipping Country
+                                    </th>
+                                    <th>
+                                        Tax
+                                    </th>
+                                    <th>
+                                        Shipping
+                                    </th>
+                                    <th>
+                                        TotalPrice
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int i = 1;}
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @item.InvoiceNo
+                                    </td>
+                                    <td>
+                                        @item.CustomUserFullName
+                                    </td>
+                                    <td>
+                                        @item.ShippingCountry
+                                    </td>
+                                    <td>
+                                        $@item.Tax.ToString("0.00")
+                                    </td>
+                                    <td>
+                                        $@item.ShippingPrice.ToString("0.00")
+                                    </td>
+                                    <td>
+                                        $@item.TotalPrice.ToString("0.00")
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a asp-area="admin" asp-controller="shoppage" asp-action="saleitem" asp-route-saleId="@item.Id" class="btn btn-success btn-fw mt-2">Sale Items</a>
+                                    </td>
+                                </tr>
+                                    { i++; }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

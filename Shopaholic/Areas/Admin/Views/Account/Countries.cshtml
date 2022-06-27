@@ -1,0 +1,66 @@
+﻿@model List<Country>
+@{
+    ViewData["Title"] = "Countries";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Countries</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Shipping Price
+                                    </th>
+                                    <th>
+                                        <a asp-area="admin" asp-controller="account" asp-action="CreateCountry" class="btn btn-success btn-rounded btn-fw">Create</a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @if (item.ShippingPrice != null)
+                                        {
+                                            string shippingStr ="$" + string.Format("{0:0.00}", item.ShippingPrice);
+                                            <span>@shippingStr</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@("$0.00")</span>
+
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-warning" title="Update" asp-area="admin" asp-controller="account" asp-action="updatecountry" asp-route-id="@item.Id"><i class="mdi mdi-update"></i></a>
+                                        <a onclick="return confirm('Are you sure?')" class="btn btn-danger" title="delete" asp-area="admin" asp-controller="account" asp-action="deletecountry" asp-route-id="@item.Id"><i class="mdi mdi-delete"></i></a>
+                                    </td>
+                                </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,60 @@
+﻿@model List<Advertisement>
+@{
+    ViewData["Title"] = "Advertisement";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Advertisements</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Up Title
+                                    </th>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        <a asp-area="admin" asp-controller="homepage" asp-action="createAdvertisement" class="btn btn-success btn-rounded btn-fw">Create Advertisement</a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        <img style="width: auto !important; height:70px !important; border-radius: 0" src="~/Uploads/Images/@item.Image" alt="image">
+                                    </td>
+                                    <td>
+                                        @item.UpTitle
+                                    </td>
+                                    <td>
+                                        @item.Title
+                                    </td>
+                                    <td>
+                                        <a asp-area="admin" asp-controller="homepage" asp-action="updateAdvertisement" asp-route-id="@item.Id" class="btn btn-warning" title="Update"><i class="mdi mdi-update"></i></a>
+                                        <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="homepage" asp-action="deleteAdvertisement" asp-route-id="@item.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                                    </td>
+                                </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

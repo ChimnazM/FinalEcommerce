@@ -1,0 +1,55 @@
+﻿@model About
+@{
+    ViewData["Title"] = "CreateAboutUs";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create About Us</h4>
+
+                    <form asp-area="admin" asp-controller="aboutpage" asp-action="createAboutUs" method="post" class="forms-sample" enctype="multipart/form-data">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.UpTitle" for="uptitle">Up Title</label>
+                            <input asp-for="@Model.UpTitle" type="text" class="form-control" id="uptitle" placeholder="Up title">
+                            <span class="text-danger" asp-validation-for="@Model.UpTitle"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Title" for="title">Title</label>
+                            <input asp-for="@Model.Title" type="text" class="form-control" id="title" placeholder="Title">
+                            <span class="text-danger" asp-validation-for="@Model.Title"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.DownTitle" for="downtitle">Down Title</label>
+                            <input asp-for="@Model.DownTitle" type="text" class="form-control" id="downtitle" placeholder="Down Title">
+                            <span class="text-danger" asp-validation-for="@Model.DownTitle"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Text" for="text">Text</label>
+                            <textarea asp-for="@Model.Text" type="text" class="form-control" id="text" placeholder="Text"></textarea>
+                            <span class="text-danger" asp-validation-for="@Model.Text"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label asp-for="@Model.ImageFile" for="formFile" class="form-label">Input File</label>
+                                <input asp-for="@Model.ImageFile" class="form-control" type="file" id="formFile">
+                            </div>
+                            <span class="text-danger" asp-validation-for="@Model.ImageFile"></span>
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="aboutpage" asp-action="AboutUs" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

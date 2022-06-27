@@ -1,0 +1,53 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "UpdateProduct";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Update Product</h4>
+
+                    <form asp-area="admin" asp-controller="product" asp-action="updateProduct" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.Name" for="Name">Product Name</label>
+                            <input asp-for="@Model.Name" type="text" class="form-control" id="Name" placeholder="Name">
+                            <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Desc" for="Desc">Product Description</label>
+                            <textarea asp-for="@Model.Desc" type="text" class="form-control" id="Desc" placeholder="Description"></textarea>
+                            <span class="text-danger" asp-validation-for="@Model.Desc"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Product Gender</label>
+                            <select asp-for="@Model.CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id","Name"))" class="form-control" id="exampleFormControlSelect2">
+                            </select>
+                            <span class="text-danger" asp-validation-for="@Model.CategoryId"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Product Gender</label>
+                            <select asp-for="@Model.GenderId" asp-items="@(new SelectList(ViewBag.Genders, "Id","Name"))" class="form-control" id="exampleFormControlSelect2">
+                            </select>
+                            <input type="hidden" asp-for="@Model.Id" />
+                            <span class="text-danger" asp-validation-for="@Model.GenderId"></span>
+
+                        </div>
+
+                        <button type="submit" class="btn btn-success mr-2">Update</button>
+                        <button asp-area="admin" asp-controller="product" asp-action="index" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

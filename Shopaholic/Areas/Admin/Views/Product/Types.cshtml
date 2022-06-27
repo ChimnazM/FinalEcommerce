@@ -1,0 +1,97 @@
+﻿@model VmProduct
+@{
+    ViewData["Title"] = "Types";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Product Types</h4>
+                    <div class="d-flex justify-content-end p-2">
+                        <a asp-area="admin" asp-controller="product" asp-action="index" class="btn btn-info btn-rounded btn-fw mx-2">Product</a>
+                        <a asp-area="admin" asp-controller="product" asp-action="CreateType" asp-route-prodId="@Model.Product.Id" class="btn btn-success btn-rounded btn-fw">Create New</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Color
+                                    </th>
+                                    <th>
+                                        Size
+                                    </th>
+                                    <th>
+                                        Quantity
+                                    </th>
+                                    <th>
+                                        Price
+                                    </th>
+                                    <th>
+                                        Discount Price
+                                    </th>
+                                    <th>
+                                        Discount Deadline
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int i = 1;}
+                                @foreach (var item in Model.AllInfoToProducts)
+                                {
+                    <tr class="text-center">
+                        <td>@i</td>
+
+                        @if (item.Product.ProductImages.Where(p => p.ColorId == item.ColorId).FirstOrDefault() != null)
+                        {
+                <td class="py-1">
+                    <img style="border-radius: 0; width: 100px; height: auto" src="~/Uploads/Images/Product/@item.Product.ProductImages.Where(c=>c.ColorId == item.ColorId).FirstOrDefault().Image" alt="image">
+                </td>}
+
+                        <td>
+                            @item.Color.Name.ToUpper()
+                        </td>
+                        <td>
+                            @item.Size.Name
+                        </td>
+                        <td>
+                            @item.Quantity
+                        </td>
+                        <td>
+                            $@item.Price
+                        </td>
+                        <td>
+                            $@item.DiscountPrice
+                        </td>
+                        <td>
+                            @item.DiscountDeadline.ToString("dd.MM.yyyy")
+                        </td>
+
+
+                        <td class="text-center">
+                            <a asp-area="admin" asp-controller="product" asp-action="updatetype" asp-route-id="@item.Id" class="btn btn-warning btn-sm mt-2" title="Update">Update</a>
+                            <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="product" asp-action="deletetype" asp-route-id="@item.Id" class="btn btn-danger btn-sm mt-2" title="Delete">Delete</a>
+                        </td>
+                    </tr>{ i++; }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

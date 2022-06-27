@@ -1,0 +1,105 @@
+﻿@model VmAddToWish
+@{
+    ViewData["Title"] = "Wish";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Wishlist</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a href="">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Wishlist</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="wishlist-section">
+    <div class="container">
+        <div class="row g-0 main-row">
+            <div class="col-12">
+                <div class="wishlist-box">
+                    @if (Model.Products.FirstOrDefault() != null)
+                    {
+                        <div class="wish-header">
+                            <div class="row g-0">
+                                <div class="col-4 col-md-4 d-flex p-2">
+                                    <h1>Product</h1>
+                                </div>
+                                <div class="col-2 col-md-2 p-2">
+                                    <h2>Price</h2>
+                                </div>
+                                <div class="col-3 col-md-2 p-2">
+                                    <h3>Added Date</h3>
+                                </div>
+                                <div class="col-2 col-md-2 py-2">
+                                    <h4>Stock Status</h4>
+                                </div>
+                                <div class="col-1 col-md-2 p-2"></div>
+                            </div>
+                        </div>
+                        <div class="wish-main">
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="row g-0">
+                                    <div class="col-4 col-md-4 wish-prd-info-checkbox p-2">
+                                        <div class="wish-prd-info">
+                                            <div class="wish-prd-img">
+                                                <a asp-controller="shop" asp-action="details" asp-route-id="@item.ProductId">
+                                                    <img src="~/Uploads/Images/Product/@item.Image" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="wish-prd-content">
+                                                <h1>@item.Name</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-price">
+                                        <strong>$@item.Price.ToString("0.00")</strong>
+                                    </div>
+                                    <div class="col-3 col-md-2 wish-date">
+                                        <strong>@item.Date</strong>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-stock">
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <strong>On sale</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>In stock</strong>
+                                        }
+                                    </div>
+                                    <div class="col-1 col-md-2 wish-control">
+                                        <a data-name="@item.Name" data-id="@item.TypeId" class="animate-button close px-2 add-to-card-btn add-to-cart-from-wish" style="cursor: pointer">Add To Card</a>
+                                        <a data-name="@item.Name" data-id="@item.TypeId" class="add-to-cart-from-wish"><span><i class="fas fa-shopping-cart fa-lg px-2"></i></span></a>
+                                        <a data-typeid="@item.TypeId" class="wish-delete-btn" style="cursor: pointer"><span><i class="fas fa-trash-alt fa-lg px-2"></i></span></a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <p style="font-size: 20px">Wish list is empty</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,164 @@
+﻿@model VmAdmin
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-md-center">
+                            <i class="mdi mdi-basket icon-lg text-success"></i>
+                            <div class="ml-3">
+                                <p class="mb-0">Daily Order</p>
+                                <h6>@Model.todayOrderCount</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-md-center">
+                            <i class="mdi mdi-basket icon-lg text-warning"></i>
+                            <div class="ml-3">
+                                <p class="mb-0">Daily Sold Items</p>
+                                <h6>@Model.todaySaleItemsCount</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-md-center">
+                            <i class="mdi mdi-diamond icon-lg text-info"></i>
+                            <div class="ml-3">
+                                <p class="mb-0">Monthly Sales</p>
+                                <h6>@Model.monthOrderCount</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-md-center">
+                            <i class="mdi mdi-chart-line-stacked icon-lg text-danger"></i>
+                            <div class="ml-3">
+                                <p class="mb-0">Daily Total Revenue</p>
+                                <h6>$ @Model.todaytotalRevenue.ToString("0.00")</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="row flex-grow">
+                    <div class="col-12 col-md-6 col-lg-12 grid-margin stretch-card">
+                        <div class="card bg-info">
+                            <div class="text-white py-3 px-4">
+                                <h3 class="card-title text-white mb-0">Today's Best Seller</h3>
+                                @if (Model.todayBestSellerProduct.Name != null)
+                                {
+                                    <p>Revenue: <span>$@((Model.todayRevenueBestSeller).ToString("0.00"))</span></p>
+
+                                    <div class="chart-container">
+                                        <h3>@Model.todayBestSellerProduct.Name</h3>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p>Color: <span>@Model.todayBestSellerSaleItem.AllInfoToProduct.Color.Name.ToUpper()</span></p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p>Size: <span>@Model.todayBestSellerSaleItem.AllInfoToProduct.Size.Name.ToUpper()</span></p>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-12 grid-margin stretch-card">
+                        <div class="card bg-success">
+                            <div class="text-white py-3 px-4">
+                                <h3 class="card-title text-white mb-0">Month's Best Seller</h3>
+                                @if (Model.monthBestSellerProduct.Name != null)
+                                {
+                                    <p>Revenue: <span>$@(Model.monthRevenueBestSeller.ToString("0.00"))</span></p>
+
+                                    <div class="chart-container">
+                                        <h3>@Model.monthBestSellerProduct.Name</h3>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-6">
+                                            <p>Color: <span>@Model.monthBestSellerSaleItem.AllInfoToProduct.Color.Name.ToUpper()</span></p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p>Size: <span>@Model.monthBestSellerSaleItem.AllInfoToProduct.Size.Name.ToUpper()</span></p>
+                                        </div>
+                                    </div>
+                                }
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Sales by Categories</h6>
+                        <p class="card-description">For current month</p>
+                        <div class="chart-wrapper">
+                            <canvas id="product-pie"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 d-flex flex-column">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Sales by Product Gender</h6>
+                        <p class="card-description">For current month</p>
+                        <div class="chart-wrapper">
+                            <canvas id="product-gender-pie"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Monthly Analytics by Categories</h6>
+                        <div id="js-legend" class="chartjs-legend mt-4 mb-5"></div>
+                        <div class="demo-chart">
+                            <canvas id="dashboard-monthly-analytics"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+        <div class="container-fluid clearfix">
+        </div>
+    </footer>
+    <!-- partial -->
+</div>
+
+

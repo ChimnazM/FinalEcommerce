@@ -1,0 +1,23 @@
+﻿@model List<Partner>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<section class="partners">
+    <div class="container">
+        <div class="row g-0 justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="container">
+                    <div class="partner-imagebox justify-content-center">
+                        @foreach (var item in Model)
+                        {
+                            <a href="@item.Link" target="_blank"><div class="partner-item"><img src="~/Uploads/Images/@item.Image" alt=""></div></a>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>

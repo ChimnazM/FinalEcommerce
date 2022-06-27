@@ -1,0 +1,105 @@
+﻿@model VmProduct
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Products</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th class="text-center">
+                                        Image
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Category
+                                    </th>
+                                    <th>
+                                        Gender
+                                    </th>
+                                    <th style="white-space: nowrap">
+                                        Added Date
+                                    </th>
+                                    <th>
+                                    </th>
+                                    <th>
+                                        <a asp-area="admin" asp-controller="product" asp-action="createproduct" class="btn btn-success btn-rounded btn-fw">Create</a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int i = 1;}
+                                @foreach (var item in Model.Products) 
+                                {
+                                <tr>
+                                    <td>@i</td>
+                                    @if (item.ProductImages.FirstOrDefault() != null)
+                                    {
+                                        <td class="py-1">
+                                            <img style="border-radius: 0; width: 100px; height: auto" src="~/Uploads/Images/Product/@item.ProductImages.FirstOrDefault().Image" alt="image">
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="py-1">
+                                            <img style="border-radius: 0; width: 100px; height: auto" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqedueT5B6j_TaQ1ajt0BVgtzqZiwEq26cBw&usqp=CAU" alt="image">
+                                        </td>
+                                    }
+
+                                    <td>
+                                        @(item.Name!= null? item.Name:"")
+                                    </td>
+                                    <td>
+                                        @(item.Desc != null? item.Desc : "")
+                                    </td>
+                                    <td>
+                                        @(item.Category != null? item.Category.Name : "")
+                                    </td>
+                                    <td>
+                                        @(item.Gender != null? item.Gender.Name : "")
+                                    </td>
+                                    <td>
+                                        @(item.AddedDate != null? item.AddedDate.ToString("dd.MM.yyyy") : "")
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a asp-area="admin" asp-controller="product" asp-action="Types" asp-route-productId="@item.Id" class="btn btn-success btn-fw mt-2">Types</a>
+                                        <a asp-area="admin" asp-controller="product" asp-action="Images" asp-route-id="@item.Id" class="btn btn-success btn-fw mt-2" title="Update">All pics</a>
+                                        <a asp-area="admin" asp-controller="product" asp-action="Infos" asp-route-id="@item.Id" class="btn btn-success btn-fw mt-2" title="Update">Other Infos</a>
+                                        <a asp-area="admin" asp-controller="product" asp-action="Comments" asp-route-id="@item.Id" class="btn btn-success btn-fw mt-2" title="Update">Comments</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-area="admin" asp-controller="product" asp-action="updateProduct" asp-route-id="@item.Id" class="btn btn-warning btn-sm mt-2" title="Update">Update</a>
+                                        <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="product" asp-action="deleteProduct" asp-route-id="@item.Id" class="btn btn-danger btn-sm mt-2" title="Delete">Delete</a>
+                                    </td>
+                                </tr>
+                                    { i++; }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

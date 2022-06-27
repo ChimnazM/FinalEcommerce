@@ -1,0 +1,37 @@
+﻿@model Social
+@{
+    ViewData["Title"] = "CreateSocial";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create Social</h4>
+
+                    <form asp-area="admin" asp-controller="layout" asp-action="CreateSocial" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.Icon" for="icon">Icon</label>
+                            <input asp-for="@Model.Icon" class="form-control" id="icon" placeholder="Icon">
+                            <span class="text-danger" asp-validation-for="@Model.Icon"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Link" for="link">Link</label>
+                            <input asp-for="@Model.Link" type="text" class="form-control" id="link" placeholder="Link">
+                            <span class="text-danger" asp-validation-for="@Model.Link"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="layout" asp-action="createSocial" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

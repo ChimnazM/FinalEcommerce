@@ -1,0 +1,111 @@
+﻿@model VmOrder
+@{
+    ViewData["Title"] = "MyOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Order</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="account" asp-action="profile">Profile</a>
+                        </li>
+                        <li class="breadcrumb-item active">My Order</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="wishlist-section">
+    <div class="container">
+        <div class="row g-0 main-row">
+            <div class="col-12">
+                <div class="wishlist-box">
+                    @if (Model.SaleItems != null)
+                    {
+                        foreach (var sale in Model.Sales.OrderByDescending(o => o.Date))
+                        {
+                            <div class="wish-header mt-3">
+                                <div class="row g-0">
+                                    <div class="col-4 col-md-4 d-flex p-2">
+                                        <h1>Product</h1>
+                                    </div>
+                                    <div class="col-2 col-md-2 d-flex p-2 justify-content-center">
+                                        <h1>Color</h1>
+                                    </div>
+                                    <div class="col-2 col-md-2 d-flex p-2 justify-content-center">
+                                        <h1>Size</h1>
+                                    </div>
+                                    <div class="col-2 col-md-2 p-2">
+                                        <h2>Price</h2>
+                                    </div>
+                                    <div class="col-2 col-md-2 p-2">
+                                        <h3>Date</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wish-main mb-3">
+                                @foreach (var item in Model.SaleItems.Where(s=>s.SaleId == sale.Id))
+                                {
+                                <div class="row g-0">
+                                    <div class="col-4 col-md-4 wish-prd-info-checkbox p-2">
+                                        <div class="wish-prd-info">
+                                            <div class="wish-prd-img">
+                                                <a href="">
+                                                    <img src="~/Uploads/Images/Product/@item.AllInfoToProduct.Product.ProductImages.FirstOrDefault(c=>c.ColorId == item.AllInfoToProduct.ColorId).Image" alt="">
+                                                </a>
+                                            </div>
+                                            <div class="wish-prd-content">
+                                                <h1>@(item.AllInfoToProduct.Product.Name + " x " + item.Quantity)</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-price text-center">
+                                        <strong>@item.AllInfoToProduct.Color.Name</strong>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-price text-center">
+                                        <strong>@item.AllInfoToProduct.Size.Name</strong>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-price">
+                                        <strong>$@item.Price.ToString("0.00")</strong>
+                                    </div>
+                                    <div class="col-2 col-md-2 wish-date">
+                                        <strong class="@(item.Sale.Date.AddMinutes(25) > DateTime.Now?"shopwise-red-color":"shopwise-dark-color")">@(item.Sale.Date.AddMinutes(25) > DateTime.Now?"Recent": item.Sale.Date.ToString("dd.MM.yy (HH:mm)"))</strong>
+                                    </div>
+                                </div>
+                                
+                                }
+                                <div class="row g-0" style="border-top: 1px solid #d1d1d1">
+                                     <div class="col-sm-12 p-2 d-flex justify-content-around align-items-center align-content-center flex-column flex-sm-row">
+                                         <p class="m-0 text-center py-2 py-sm-0">Click the "Invoice" button for get invoice of the sale.</p>
+                                         <a target="_blank" class="animate-button close" asp-controller="account" asp-action="PdfInvoice" asp-route-saleId="@sale.Id">Invoice</a>
+                                     </div>
+                                </div>
+                            </div>
+                            
+                        }
+                    }
+                    else
+                    {
+                        <div>
+                            <p style="font-size: 20px">Order list is empty</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

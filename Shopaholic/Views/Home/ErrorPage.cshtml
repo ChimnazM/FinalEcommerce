@@ -1,0 +1,22 @@
+﻿@model VmBase
+@{
+    ViewData["Title"] = "ErrorPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="error">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>404</h1>
+                <strong class="mb-2 mb-sm-3">oops! The page you requested was not found!</strong>
+                <p>The page you are looking for was moved, removed, renamed or might never existed.</p>
+                <div class="error-button">
+                    <a class="close animate-button" asp-controller="home" asp-action="index">Go To Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

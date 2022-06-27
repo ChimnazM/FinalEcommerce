@@ -1,0 +1,41 @@
+﻿@model Partner
+@{
+    ViewData["Title"] = "CreatePartner";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create New Partner</h4>
+
+                    <form asp-area="admin" asp-controller="homepage" asp-action="createPartner" method="post" class="forms-sample" enctype="multipart/form-data">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label asp-for="@Model.ImageFile" for="formFile" class="form-label">Input File</label>
+                                <input asp-for="@Model.ImageFile" class="form-control" type="file" id="formFile">
+                            </div>
+                            <span class="text-danger" asp-validation-for="@Model.ImageFile"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Link" for="link">Link</label>
+                            <input asp-for="@Model.Link" type="text" class="form-control" id="link" placeholder="Link">
+                            <span class="text-danger" asp-validation-for="@Model.Link"></span>
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="homepage" asp-action="partners" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

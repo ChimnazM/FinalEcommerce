@@ -1,0 +1,61 @@
+﻿@model Tax
+@{
+    ViewData["Title"] = "Tax";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <!--About Us-->
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Tax</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Price Limit
+                                    </th>
+                                    <th>
+                                        Percent
+                                    </th>
+                                    <th>
+                                        @if (Model == null)
+                                        {
+                                            <a asp-area="admin" asp-controller="shoppage" asp-action="createTax" class="btn btn-success btn-rounded btn-fw">Create Tax</a>
+                                        }
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            $@(Model.PriceLimit)
+                                        </td>
+                                        <td>
+                                            @(Model.Percent)%
+                                        </td>
+                                        <td>
+                                            <a asp-area="admin" asp-controller="shoppage" asp-action="updateTax" asp-route-id="@Model.Id" class="btn btn-warning" title="Update"><i class="mdi mdi-update"></i></a>
+                                            <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="shoppage" asp-action="DeleteTax" asp-route-id="@Model.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

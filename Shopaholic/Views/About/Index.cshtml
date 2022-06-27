@@ -1,0 +1,140 @@
+﻿@model VmAbout
+@{
+    ViewData["Title"] = "About";
+}
+
+<!-- Bread Crumb -->
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>About Us</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">About</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success -->
+<section class="success">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 success-left">
+                <span>@(Model.About.UpTitle!=null? Model.About.UpTitle:"")</span>
+                <h1>@(Model.About.Title!=null? Model.About.Title:"")</h1>
+                <strong>@(Model.About.DownTitle!=null? Model.About.DownTitle:"")</strong>
+                <p>
+                    @Html.Raw(Model.About.Text != null ? Model.About.Text : "")
+                </p>
+            </div>
+            <div class="col-md-6 success-right">
+                <div class="mt-4 mt-md-0 single-image">
+                    @if (Model.About.Image != null)
+                    {
+                        <img src="~/Uploads/Images/@Model.About.Image" alt="About image">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Choose Us -->
+<section class="choose-cards">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row justify-content-center choose-header g-0">
+                <div class="col-lg-6 col-md-8 text-center header-box">
+                    <h1>Why Choose Us?</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                </div>
+            </div>
+            <div class="row justify-content-center choose-main g-0">
+                @foreach (var item in Model.ChooseUs)
+                {
+                    <div class="col-lg-4 col-sm-6 choose-item-box">
+                        <div class="choose-item d-flex flex-row flex-nowrap">
+                            <div class="box-icon col-1">
+                                @if (item.Icon != "" || @item.Icon != null)
+                                {
+                                    <img src="~/Uploads/Icons/@item.Icon" class="change-my-color" alt="">
+                                }
+                            </div>
+                            <div class="box-content">
+                                <strong>@(item.Title!=null? item.Title:"")</strong>
+                                @Html.Raw(item.Context != null ? item.Context : "")
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Mission -->
+<section class="our-mission">
+    <div class="container">
+        <div class="row align-items-center g-0">
+            <div class="col-lg-6 col-md-12 col-sm-12 image-col">
+                <div class="image-video-cover-box">
+                    <div class="cover-image mb-4 mb-lg-0"><img src="~/Uploads/Images/@Model.MissionFile.Image" class="w-100" alt=""></div>
+                    <a href="@Model.MissionFile.Link" target="_blank">
+                        <div class="fab-button play">
+                            <div class="ripple">
+                            </div>
+                            <div class="ripple" style="animation-delay: 0.6s;">
+                            </div>
+                            <div class="mission-button" id="fab">
+                                <span class="play-button"><i class="fas fa-play"></i></span>
+
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 pl-5 content-col">
+                <h1>Our Mission & Vision</h1>
+                <p>If you are going to use a passage of Ipsum, you need to be sure there isn't anything embarrassing hidden in middle of text.</p>
+
+                @foreach (var item in Model.MissionFeatures)
+                {
+                    <div class="mission-feature">
+                        <div class="icon">
+                            <img src="~/Uploads/Icons/@(item.Icon!=null?item.Icon:"")" alt="">
+                        </div>
+                        <div class="icon-content-box">
+                            <strong>@(item.Title!=null? item.Title:"")</strong>
+                            @Html.Raw(item.Text != null ? item.Text : "")
+                        </div>
+                    </div>
+
+                }
+
+                @*<a asp-controller="contact" asp-action="index" class="close animate-button">Read More</a>*@
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<partial name="_TestimonialPartial" model="@Model" />
+
+<!-- Partners -->
+<partial name="_PartnersPartial" model="@Model.Partners" />
+
+

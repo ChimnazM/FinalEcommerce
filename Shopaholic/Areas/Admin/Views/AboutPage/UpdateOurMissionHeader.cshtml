@@ -1,0 +1,38 @@
+﻿@model Universal
+@{
+    ViewData["Title"] = "UpdateOurMissionHeader";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Update Our Mission Header</h4>
+
+                    <form asp-area="admin" asp-controller="aboutpage" asp-action="UpdateOurMissionHeader" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.Title" for="title">Title</label>
+                            <input asp-for="@Model.Title" type="text" class="form-control" id="title" placeholder="Title">
+                            <span class="text-danger" asp-validation-for="@Model.Title"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Desc" for="info">Info</label>
+                            <textarea asp-for="@Model.Desc" type="text" class="form-control" id="info" placeholder="Info"></textarea>
+                            <span class="text-danger" asp-validation-for="@Model.Desc"></span>
+                            <input type="hidden" asp-for="@Model.Id" />
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success mr-2">Update</button>
+                        <button asp-area="admin" asp-controller="aboutPage" asp-action="OurMission" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

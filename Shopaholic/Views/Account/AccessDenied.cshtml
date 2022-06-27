@@ -1,0 +1,20 @@
+﻿@model VmBase
+@{
+    ViewData["Title"] = "AccessDenied";
+}
+
+<section class="error">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 style="font-size:70px">Access Denied</h1>
+                <strong class="mb-2 mb-sm-3">oops! You dont have permission to accept this page.</strong>
+                <p>Please contact your Site Administrator(s) to request access.</p>
+                <div class="error-button">
+                    <a class="close animate-button" asp-controller="home" asp-action="index">Go To Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,46 @@
+﻿@model ContactInfo
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="row p-2 pt-0">
+        <div class="col-12 p-5 pt-0">
+            <div class="d-flex flex-row align-content-center justify-content-between">
+                <h5 style="font-weight: bold" class="bold-text py-2">Contact Info</h5>
+
+                @if (Model == null)
+                {
+                    <div>
+                        <a asp-area="admin" asp-controller="contactpage" asp-action="create" class="btn btn-success btn-rounded btn-fw">Create Faq</a>
+                    </div>
+                }
+
+            </div>
+
+            <div style="border: 1px solid" class="row">
+                <div style="border-right: 1px solid" class="col-3">Title</div>
+                <div style="border-right: 1px solid" class="col-4">Description</div>
+                <div style="border-right: 1px solid" class="col-4">Map</div>
+                <div class="col-1"></div>
+            </div>
+
+            @if (Model != null)
+            {
+                <div style="border: 1px solid" class="row d-flex justify-content-center">
+                    <div style="border-right: 1px solid" class="col-3">@Model.Title</div>
+                    <div style="border-right: 1px solid" class="col-4">@Html.Raw(Model.Desc)</div>
+                    <div style="border-right: 1px solid" class="col-4"><p class="text-break">@Model.Map</p></div>
+                    <div class="col-1">
+                        <a style="display:block; width: 50px; margin:5px" asp-area="admin" asp-controller="contactpage" asp-action="update" asp-route-id="@Model.Id" class="btn btn-warning" title="Update">Update</a>
+                        <a onclick="return confirm('Are you sure?')" style="display:block; width: 50px; margin:5px" asp-area="admin" asp-controller="contactpage" asp-action="delete" asp-route-id="@Model.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+

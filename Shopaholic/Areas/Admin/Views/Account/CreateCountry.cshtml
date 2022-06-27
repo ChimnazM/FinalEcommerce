@@ -1,0 +1,37 @@
+﻿@model Country
+@{
+    ViewData["Title"] = "CreateCountry";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create Country</h4>
+
+                    <form asp-area="admin" asp-controller="account" asp-action="CreateCountry" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.Name" for="name">Name</label>
+                            <input asp-for="@Model.Name" type="text" class="form-control" id="name" placeholder="Country Name">
+                            <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.ShippingPrice" for="shipping">Shipping Price</label>
+                            <input asp-for="@Model.ShippingPrice" type="number" pattern="^\d*(\.\d{0,2})?$" step="0.01"  class="form-control" id="shipping" placeholder="Shipping Price">
+                            <span class="text-danger" asp-validation-for="@Model.ShippingPrice"></span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="account" asp-action="countries" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

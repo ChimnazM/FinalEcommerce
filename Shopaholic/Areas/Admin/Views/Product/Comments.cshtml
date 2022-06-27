@@ -1,0 +1,67 @@
+﻿@model List<VmComment>
+@{
+    ViewData["Title"] = "Comments";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Product Comments</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Commenter
+                                    </th>
+                                    <th style="text-align: center">
+                                        Comment Message
+                                    </th>
+                                    <th style="text-align: center">
+                                        Rating
+                                    </th>
+                                    <th style="white-space: nowrap">
+                                        Added Date
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+
+                                    <td style="white-space: nowrap">
+                                        @item.CustomUserFullname
+                                    </td>
+                                    <td>
+                                        @item.Text
+                                    </td>
+                                    <td>
+                                        @item.Rating
+                                    </td>
+                                    <td>
+                                        @item.AddedDate.ToString("dd.MM.yyyy")
+                                    </td>
+                                    <td>
+                                        <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="product" asp-action="DeleteComment" asp-route-id="@item.Id" class="btn btn-danger" title="delete"><i class="mdi mdi-delete"></i></a>
+                                    </td>
+                                </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,47 @@
+﻿@model ProductImage
+@{
+    ViewData["Title"] = "UpdateImage";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Update Product's Picture</h4>
+
+                    <form asp-area="admin" asp-controller="product" asp-action="UpdateImage" method="post" class="forms-sample" enctype="multipart/form-data">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Product Color</label>
+                            <select asp-for="@Model.ColorId" asp-items="@(new SelectList(ViewBag.Colors, "Id","Name"))" class="form-control" id="exampleFormControlSelect2">
+                            </select>
+                            <span class="text-danger" asp-validation-for="@Model.ColorId"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label asp-for="@Model.ImageFile" for="formFile" class="form-label">Input File</label>
+                                <input asp-for="@Model.ImageFile" class="form-control" type="file" id="formFile">
+                            </div>
+                            <span class="text-danger" asp-validation-for="@Model.ImageFile"></span>
+
+                            <input type="hidden" asp-for="@Model.ProductId" />
+                            <input type="hidden" asp-for="@Model.Image" />
+                            <input type="hidden" asp-for="@Model.Id" />
+                        </div>
+                        <div class="mt-3 mb-3">
+                            <img src="~/Uploads/Images/Product/@Model.Image" height="100" alt="Alternate Text" />
+                        </div>
+
+                        <button type="submit" class="btn btn-success mr-2">Update</button>
+                        <button asp-area="admin" asp-controller="product" asp-action="Images" asp-route-id="@Model.ProductId" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

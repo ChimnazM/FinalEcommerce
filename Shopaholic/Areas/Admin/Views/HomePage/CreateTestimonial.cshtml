@@ -1,0 +1,42 @@
+﻿@model Testimonial
+@{
+    ViewData["Title"] = "CreateTestimonial";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create Testimonial</h4>
+
+                    <form asp-area="admin" asp-controller="homepage" asp-action="createTestimonial" method="post" class="forms-sample">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+                        <div class="form-group">
+                            <label asp-for="@Model.UpTitle" for="uptitle">Up Title</label>
+                            <input asp-for="@Model.UpTitle" type="text" class="form-control" id="uptitle" placeholder="Up title">
+                            <span class="text-danger" asp-validation-for="@Model.UpTitle"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Title" for="title">Title</label>
+                            <input asp-for="@Model.Title" type="text" class="form-control" id="title" placeholder="Title">
+                            <span class="text-danger" asp-validation-for="@Model.Title"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="@Model.Info" for="info">Info</label>
+                            <textarea asp-for="@Model.Info" type="text" class="form-control" id="info" placeholder="Info"></textarea>
+                            <span class="text-danger" asp-validation-for="@Model.Info"></span>
+                        </div>
+                        
+
+                        <button type="submit" class="btn btn-success mr-2">Create</button>
+                        <button asp-area="admin" asp-controller="homepage" asp-action="testimonial" class="btn btn-light">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

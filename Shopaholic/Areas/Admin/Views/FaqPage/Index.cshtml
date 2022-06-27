@@ -1,0 +1,126 @@
+﻿@model List<Faq>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+
+            <!--General Questions-->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title m-2">Question and Answers</h4>
+                    <div class="accordion" id="accordion-3" role="tablist">
+                        <div class="d-flex flex-row align-content-center justify-content-between">
+                            <h6 class="p-2">General Questions</h6>
+                            <div class="pr-4">
+                                <a asp-area="admin" asp-controller="faqpage" asp-action="create" class="btn btn-success btn-rounded btn-fw">Create Faq</a>
+                            </div>
+                        </div>
+                        @{ int i = 0;}
+                        @if (Model != null)
+                        {
+                            @foreach (var item in Model.Where(g => g.IsGeneral == true).ToList())
+                            {
+
+                                <div class="card">
+                                    <div class="card-header row" role="tab" id="headingOne-@(i)">
+
+                                        <div class="col-10">
+                                            <h5 class="mb-0">
+                                                <a data-toggle="collapse" href="#collapseOne-@(i)" aria-expanded="false" aria-controls="collapseOne-@(i)" class="collapsed">
+                                                    @item.Question
+                                                </a>
+                                            </h5>
+                                        </div>
+
+                                        <div class="col-2">
+                                            <a asp-area="admin" asp-controller="faqpage" asp-action="update" asp-route-id="@item.Id" class="btn btn-warning d-inline-block" title="Update"><i class="mdi mdi-update"></i></a>
+                                            <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="faqpage" asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger d-inline-block" title="delete"><i class="mdi mdi-delete"></i></a>
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne-@(i)" class="collapse" role="tabpanel" aria-labelledby="headingOne-@(i)" data-parent="#accordion-3" style="">
+                                        <div class="card-body">
+                                            @Html.Raw(item.Answer)
+                                        </div>
+                                    </div>
+                                </div>
+                                { i++; };
+                            }
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+
+            <!--Other Questions-->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title m-2">Question and Answers</h4>
+
+                    <div class="accordion" id="accordion-3" role="tablist">
+                        <div class="d-flex flex-row align-content-center justify-content-between">
+                            <h6 class="p-2">General Questions</h6>
+                            <div class="pr-4">
+                                <a asp-area="admin" asp-controller="faqpage" asp-action="create" class="btn btn-success btn-rounded btn-fw">Create Faq</a>
+                            </div>
+                        </div>
+
+                        @if (Model != null)
+                        {
+                            @foreach (var item in Model.Where(g => g.IsGeneral == false).ToList())
+                            {
+
+                                <div class="card">
+                                    <div class="card-header row" role="tab" id="headingOne-@(i)">
+
+                                        <div class="col-10">
+                                            <h5 class="mb-0">
+                                                <a data-toggle="collapse" href="#collapseOne-@(i)" aria-expanded="false" aria-controls="collapseOne-@(i)" class="collapsed">
+                                                    @item.Question
+                                                </a>
+                                            </h5>
+                                        </div>
+
+                                        <div class="col-2">
+                                            <a asp-area="admin" asp-controller="faqpage" asp-action="update" asp-route-id="@item.Id" class="btn btn-warning d-inline-block" title="Update"><i class="mdi mdi-update"></i></a>
+                                            <a onclick="return confirm('Are you sure?')" asp-area="admin" asp-controller="faqpage" asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger d-inline-block" title="delete"><i class="mdi mdi-delete"></i></a>
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne-@(i)" class="collapse" role="tabpanel" aria-labelledby="headingOne-@(i)" data-parent="#accordion-3" style="">
+                                        <div class="card-body">
+                                            @Html.Raw(item.Answer)
+                                        </div>
+                                    </div>
+                                </div>
+                                { i++; };
+                            }
+
+                        }
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+

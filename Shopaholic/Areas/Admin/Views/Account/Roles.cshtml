@@ -1,0 +1,57 @@
+﻿@model List<IdentityRole>
+
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title ml-2">Roles</h4>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Role Id
+                                    </th>
+                                    <th>
+                                        Role Name
+                                    </th>
+                                    @if (Model == null)
+                                    {
+                                        <th class="d-flex flex-row justify-content-center">
+                                            <a class="btn btn-success btn-rounded btn-fw" asp-area="admin" asp-controller="account" asp-action="createrole">Create new Role</a>
+                                        </th>
+                                    }
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Id
+                                        </td>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td class="d-flex flex-row justify-content-center">
+                                            <a asp-area="admin" asp-controller="account" asp-action="updaterole" asp-route-id="@item.Id" class="btn btn-warning" title="Update"><i class="mdi mdi-update"></i></a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

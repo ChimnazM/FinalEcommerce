@@ -1,0 +1,463 @@
+﻿@model VmShop
+@{
+    ViewData["Title"] = "Shop";
+    int x = 0;
+}
+
+<!--Bread Crumb-->
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Shop</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Shop</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Main Shop Page-->
+<section class="shop">
+    <div class="container">
+        <div class="row main-row">
+
+            <div class="col-lg-9">
+                <div class="products-area">
+                    <div class="products-area-header">
+                        <div class="col-12">
+                            <div class="selectbox justify-content-md-end p-md-4">
+                                <div class="filter-button">
+                                    <button id="filter-btn"><i class="fas fa-filter"></i></button>
+                                </div>
+                                <!--Shop Top Filter-->
+                                <form asp-controller="shop" asp-action="index" method="get">
+                                    <select asp-for="@Model.SortId" asp-items="@(new SelectList(ViewBag.Sorts,"Id","Name"))" class="form-select" id="product-sort" aria-label="Default select example">
+                                    </select>
+                                    <button type="submit" asp-controller="shop" asp-action="index" id="sort-btn" hidden></button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!--Products-->
+                    <div class="products">
+
+                        @foreach (var item in Model.Products)
+                        {
+                            <!-- item -->
+                            <div class="card m-2 my-3 item">
+                                <div class="product-image-box">
+                                    @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                                    {
+                                        @if (item.AllInfoToProducts.FirstOrDefault().DiscountDeadline > DateTime.Now)
+                                        {
+                                            <span class="discount">
+                                                -@(Decimal.Round(((1 - item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice / item.AllInfoToProducts.FirstOrDefault().Price) * 100)))%
+                                            </span>
+                                        }
+                                    }
+
+
+                                    <div class="product-img">
+                                        @if (Model.ProductImages.Any(i => i.ProductId == item.Id))
+                                        {
+                                            <img src="~/Uploads/Images/Product/@item.ProductImages.FirstOrDefault().Image"
+                                                 class="card-img-top"
+                                                 alt="..." />
+                                        }
+                                    </div>
+
+                                    <div class="image-buttons">
+                                        <ul>
+                                            <li>
+                                                <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to cart"
+                                                   class="add-to-card-index-btn">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a title="Go details"
+                                                   asp-controller="shop" asp-action="details" asp-route-id="@item.Id">
+                                                    <i class="fas fa-search-plus"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to wishlist"
+                                                   class="add-to-wishlist-index-btn">
+                                                    <i class="fas fa-heart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 class="product-title"><a  asp-controller="shop" asp-action="details" asp-route-id="@item.Id">@(item.Name != null?item.Name:"")</a></h5>
+                                    <div class="price-box">
+                                        @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                                        {
+
+                                            @if (item.AllInfoToProducts.FirstOrDefault().DiscountDeadline > DateTime.Now)
+                                            {
+                                                <span class="old-price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                                <span class="price"> $@item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="rating-box">
+                                        @{
+                                            int ratingSum = 0;
+                                            int ratingCount = 0;
+                                            int ratingAverage = 0;
+                                            foreach (var comment in Model.Comments.Where(p => p.ProductId == item.Id))
+                                            {
+                                                ratingSum += comment.Rating;
+                                                ratingCount++;
+                                            }
+                                            if (ratingCount != 0)
+                                            {
+                                                ratingAverage = ratingSum / ratingCount;
+
+                                            }
+                                            else
+                                            {
+                                                ratingAverage = 0;
+                                            }
+
+
+                                            <div class="stars">
+                                                @for (int i = 0; i < ratingAverage; i++)
+                                                {
+                                                    <span><i class="fas fa-star"></i></span>
+
+                                                }
+                                                @for (int i = 0; i < (5 - ratingAverage); i++)
+                                                {
+                                                    <span><i class="far fa-star"></i></span>
+
+                                                }
+                                            </div>
+
+                                        }
+
+
+                                        <div class="rating px-2">
+                                            <span class="raiting-number">(@ratingCount)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                    @if (Model.Products.Count != 0)
+                    {
+                         <!--Pagination-->
+                        <nav class="pagination">
+                            <ul>
+                                <li class="@(ViewBag.ActivePage== 1 ? "disable d-none" :"")"><a asp-controller="shop" asp-action="index" asp-all-route-data="@ViewBag.Filter" asp-route-page="@(ViewBag.ActivePage== 1 ? 1 : ViewBag.ActivePage - 1)"><i class="fas fa-arrow-left"></i></a></li>
+                                @for (int i = 1; i <= ViewBag.PageCount; i++)
+                                {
+                                    <li><a asp-controller="shop" asp-action="index" asp-all-route-data="@ViewBag.Filter" asp-route-page="@i" class="@(ViewBag.ActivePage==i?"active":"")">@i</a></li>
+                                }
+                                <li class="@(ViewBag.ActivePage== ViewBag.PageCount ? "disable d-none" :"")"><a asp-controller="shop" asp-action="index" asp-all-route-data="@ViewBag.Filter" asp-route-page="@(ViewBag.ActivePage== ViewBag.PageCount?ViewBag.PageCount:ViewBag.ActivePage + 1)"><i class="fas fa-arrow-right"></i></a></li>
+                            </ul>
+                        </nav>
+                    }
+                    else
+                    {
+                        <div>
+                            <p style="font-size: 20px">Not any product</p>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+            <div class="col-lg-3 order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+                <div class="sidebar sidebar-main">
+                    <!--Filter by Price-->
+                    <div class="filter-price">
+                        <h1>@Model.Universals.Where(s => s.Section == "Price").FirstOrDefault().Title</h1>
+                        <form asp-controller="shop" asp-action="index" method="get">
+                            <div class="range-filter d-flex">
+                                <div class="min">
+                                    <input asp-for="@Model.minPrice" placeholder="Min" id="min">
+                                </div>
+                                <span>-</span>
+                                <div class="max">
+                                    <input asp-for="@Model.maxPrice" placeholder="Max" id="max">
+                                </div>
+                                <input type="hidden" name="catId" value="@ViewBag.Filter["catId"]" />
+                                <button class="btn"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--Filter by Gender-->
+                    <div class="product-categories">
+                        <h4>@Model.Universals.Where(s => s.Section == "Gender").FirstOrDefault().Title</h4>
+                        <ul>
+                            @foreach (var item in Model.Genders)
+                            {
+                                <li><a asp-controller="shop" asp-action="index" asp-route-genId="@item.Id">@item.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!--Filter by Color-->
+                    <div class="filter-color">
+                        <h2>@Model.Universals.Where(s => s.Section == "Color").FirstOrDefault().Title</h2>
+                        <ul>
+                            @foreach (var item in Model.Colors)
+                            {
+
+                                @foreach (var product in Model.AllProducts)
+                                {
+                                    if (product.AllInfoToProducts.Any(c => c.ColorId == item.Id))
+                                    {
+                                        x++;
+                                    }
+                                }
+                                <li>
+                                    <div class="type-color">
+                                        <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id"><span style="background-color: @item.Name.ToLower(); box-shadow: 0px 0px 2px 0px black;" class="color-circle"></span></a>
+                                        <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id">@item.Name</a>
+                                        <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id"><span class="count">(@x)</span></a>
+                                    </div>
+                                </li>
+
+                                x = 0;
+                            }
+
+                        </ul>
+                    </div>
+
+                    <!--Filter by Size-->
+                    <div class="filter-size">
+                        <h3>@Model.Universals.Where(s => s.Section == "Size").FirstOrDefault().Title</h3>
+                        <ul>
+                            @foreach (var item in Model.Sizes)
+                            {
+
+                                 @foreach (var product in Model.AllProducts)
+                                {
+                                    if (product.AllInfoToProducts.Any(c => c.SizeId == item.Id))
+                                    {
+                                        x++;
+                                    }
+                                }
+                                <li>
+                                    <div class="type-button">
+                                        <a asp-controller="shop" asp-action="index" asp-route-sizeId="@item.Id">
+                                            <span>></span>@item.Name
+                                        </a>
+                                        <a asp-controller="shop" asp-action="index" asp-route-sizeId="@item.Id">
+                                            <span class="count">(@x)</span>
+                                        </a>
+
+                                    </div>
+                                </li>
+                                x = 0;
+                            }
+                        </ul>
+                    </div>
+
+                    <!--Categories-->
+                    <div class="product-categories">
+                        <h4>@Model.Universals.Where(s => s.Section == "Categories").FirstOrDefault().Title</h4>
+                        <ul>
+                            @foreach (var item in Model.Categories)
+                            {
+                                <li><a asp-controller="shop" asp-action="index" asp-route-catId="@item.Id">@item.Name</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!--Product Status-->
+                    <div class="product-status">
+                        <h5>@Model.Universals.Where(s => s.Section == "Status").FirstOrDefault().Title</h5>
+                        <ul>
+                            <li><a asp-controller="shop" asp-action="index" asp-route-status="false">In Stock</a></li>
+                            <li><a asp-controller="shop" asp-action="index" asp-route-status="true">On Sale</a></li>
+                        </ul>
+                    </div>
+
+                    <!--Advertisement-->
+                    <div class="sidebar-image">
+                        <div class="shop-banner">
+                            @foreach (var item in Model.Advertisements.Where(s => s.Section == "Shop"))
+                            {
+                                <div class="banner-image">
+                                    <img src="~/Uploads/Images//@item.Image" alt="">
+                                </div>
+                                <div class="banner-content">
+                                    <h6>@item.UpTitle</h6>
+                                    <strong>@item.Title</strong>
+                                    <a class="close animate-button mt-2 mb-2" asp-controller="shop" asp-action="index" asp-route-catId="4">Shop Now</a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Mobile Filter Menu section-->
+<section class="filter-menu-section">
+    <div id="mobile-filter-menu" class="mobile-filter animate__animated animate__slideInLeft d-none">
+        <div class="filter-header">
+            <h1>Product Filters</h1>
+            <button id="filter-close"><i class="fas fa-times-circle fa-2x"></i></button>
+        </div>
+        <div class="filter-main">
+            <div class="sidebar">
+                <!--Filter by Price-->
+                <div class="filter-price">
+                    <h1>@Model.Universals.Where(s => s.Section == "Price").FirstOrDefault().Title</h1>
+                    <form asp-controller="shop" asp-action="index" method="get">
+                        <div class="range-filter d-flex">
+                            <div class="min">
+                                <input asp-for="@Model.minPrice" placeholder="Min" id="min">
+                            </div>
+                            <span>-</span>
+                            <div class="max">
+                                <input asp-for="@Model.maxPrice" placeholder="Max" id="max">
+                            </div>
+                            <input type="hidden" name="catId" value="@ViewBag.Filter["catId"]" />
+                            <button class="btn"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Filter by Gender-->
+                <div class="product-categories">
+                    <h4>@Model.Universals.Where(s => s.Section == "Gender").FirstOrDefault().Title</h4>
+                    <ul>
+                        @foreach (var item in Model.Genders)
+                        {
+                            <li><a asp-controller="shop" asp-action="index" asp-route-genId="@item.Id">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+
+                <!--Filter by Color-->
+                <div class="filter-color">
+                    <h2>@Model.Universals.Where(s => s.Section == "Color").FirstOrDefault().Title</h2>
+                    <ul>
+                        @foreach (var item in Model.Colors)
+                        {
+
+                            @foreach (var product in Model.AllProducts)
+                            {
+                                if (product.AllInfoToProducts.Any(c => c.ColorId == item.Id))
+                                {
+                                    x++;
+                                }
+                            }
+                            <li>
+                                <div class="type-color">
+                                    <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id"><span style="background-color: @item.Name.ToLower(); box-shadow: 0px 0px 2px 0px black;" class="color-circle"></span></a>
+                                    <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id">@item.Name</a>
+                                    <a asp-controller="shop" asp-action="index" asp-route-colorId="@item.Id"><span class="count">(@x)</span></a>
+                                </div>
+                            </li>
+
+                            x = 0;
+                        }
+
+                    </ul>
+                </div>
+
+                <!--Filter by Size-->
+                <div class="filter-size">
+                    <h3>@Model.Universals.Where(s => s.Section == "Size").FirstOrDefault().Title</h3>
+                    <ul>
+                        @foreach (var item in Model.Sizes)
+                        {
+
+                            @foreach (var product in Model.AllProducts)
+                            {
+                                if (product.AllInfoToProducts.Any(c => c.SizeId == item.Id))
+                                {
+                                    x++;
+                                }
+                            }
+                            <li>
+                                <div class="type-button">
+                                    <a asp-controller="shop" asp-action="index" asp-route-sizeId="@item.Id">
+                                        <span>></span>@item.Name
+                                    </a>
+                                    <a asp-controller="shop" asp-action="index" asp-route-sizeId="@item.Id">
+                                        <span class="count">(@x)</span>
+                                    </a>
+
+                                </div>
+                            </li>
+                            x = 0;
+                        }
+                    </ul>
+                </div>
+
+                <!--Categories-->
+                <div class="product-categories">
+                    <h4>@Model.Universals.Where(s => s.Section == "Categories").FirstOrDefault().Title</h4>
+                    <ul>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <li><a asp-controller="shop" asp-action="index" asp-route-catId="@item.Id">@item.Name</a></li>
+                        }
+                    </ul>
+                </div>
+
+                <!--Product Status-->
+                <div class="product-status">
+                    <h5>@Model.Universals.Where(s => s.Section == "Status").FirstOrDefault().Title</h5>
+                    <ul>
+                        <li><a asp-controller="shop" asp-action="index" asp-route-status="false">In Stock</a></li>
+                        <li><a asp-controller="shop" asp-action="index" asp-route-status="true">On Sale</a></li>
+                    </ul>
+                </div>
+
+                <!--Advertisement-->
+                <div class="sidebar-image">
+                    <div class="shop-banner">
+                        @foreach (var item in Model.Advertisements.Where(s => s.Section == "Shop"))
+                        {
+                            <div class="banner-image">
+                                <img src="~/Uploads/Images//@item.Image" alt="">
+                            </div>
+                            <div class="banner-content">
+                                <h6>@item.UpTitle</h6>
+                                <strong>@item.Title</strong>
+                                <a class="close animate-button mt-2 mb-2" asp-controller="shop" asp-action="index" asp-route-catId="4">Shop Now</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

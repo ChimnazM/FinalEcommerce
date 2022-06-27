@@ -1,0 +1,94 @@
+﻿@model VmFaq
+@{
+    ViewData["Title"] = "Faq";
+}
+
+<!--Bread Crumb-->
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Frequently Asked Question</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Faq</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Faqs-->
+<section class="faqs">
+    <div class="container">
+        <div class="row g-0">
+
+            <div class="col-12 col-md-6 faq-first">
+                <div class="faq-header">
+                    <h1>@(Model.Universals.Where(s=>s.Section == "General").FirstOrDefault().Title)</h1>
+                </div>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    @{ int i = 1; }
+
+                    @foreach (var item in Model.Faqs.Where(g => g.IsGeneral == true))
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button @(i != 1 ? "collapsed" : "")" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse@(i)" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    @item.Question
+                                </button>
+                            </h2>
+                            <div id="flush-collapse@(i)" class="accordion-collapse collapse @(i == 1 ? "show" : "")" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">@Html.Raw(item.Answer)</div>
+                            </div>
+                        </div>
+
+                        i++;
+                    }
+
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 faq-second">
+                <div class="faq-header">
+                    <h1>@(Model.Universals.Where(s => s.Section == "Other").FirstOrDefault().Title)</h1>
+                </div>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    @{
+                        int j = i + 1;
+                        int n = j;
+                    }
+
+                    @foreach (var item in Model.Faqs.Where(g => g.IsGeneral == false))
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingTwo">
+                                <button class="accordion-button @(j!=n?"collapsed":"")" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse@(j)" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                    @item.Question
+                                </button>
+                            </h2>
+                            <div id="flush-collapse@(j)" class="accordion-collapse collapse @(j==n?"show":"")" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">@Html.Raw(item.Answer)</div>
+                            </div>
+                        </div>
+
+                        j++;
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+

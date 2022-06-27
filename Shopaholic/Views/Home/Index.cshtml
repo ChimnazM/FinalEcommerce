@@ -1,0 +1,418 @@
+﻿@model VmHome
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Slider -->
+<section class="carousel-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-12 g-0">
+                <div id="carouselExampleControls"
+                     class="carousel slide"
+                     data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach (var item in Model.Sliders)
+                        {
+                        <div class="carousel-item active"
+                             style="background-image: url(/Uploads/Images/@item.Image)">
+                            <div class="slider-content">
+                                <span class="animate__animated animate__fadeInLeft">@item.UpTitle</span>
+                                <h1 class="mb-3 mt-2 animate__animated animate__fadeInLeft">@item.Title</h1>
+                                <a asp-controller="shop" asp-action="index" class="close animate-button animate__animated animate__fadeInLeft">Shop Now</a>
+                            </div>
+                        </div>
+                        }
+                        @foreach (var item in Model.Sliders)
+                        {
+                            <div class="carousel-item"
+                                 style="background-image: url(/Uploads/Images/@item.Image)">
+                                <div class="slider-content">
+                                    <span class="animate__animated animate__fadeInLeft">@item.UpTitle</span>
+                                    <h1 class="mb-3 mt-2 animate__animated animate__fadeInLeft">@item.Title</h1>
+                                    <a asp-controller="shop" asp-action="index" class="close animate-button animate__animated animate__fadeInLeft">Shop Now</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev arrow"
+                            type="button"
+                            data-bs-target="#carouselExampleControls"
+                            data-bs-slide="prev">
+                        <span class="arrow">
+                            <i class="fas fa-chevron-left fa-5x"></i>
+                        </span>
+                    </button>
+                    <button class="carousel-control-next arrow"
+                            type="button"
+                            data-bs-target="#carouselExampleControls"
+                            data-bs-slide="next">
+                        <span class="arrow">
+                            <i class="fas fa-chevron-right fa-5x"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Seasons -->
+<section class="images-section">
+    <div class="container-fluid images hider g-0">
+        <div class="row g-0">
+            @foreach (var item in Model.Advertisements.Where(s => s.Section == "Seasons"))
+            {
+                <div class="image-column col-12 col-md-6 col-lg-6 g-0">
+                    <img class="img-fluid rounded mx-auto d-block p-3"
+                         src="~/Uploads/Images/@item.Image"
+                         alt="" />
+                    <div class="image-content g-0">
+                        <h1>@item.UpTitle</h1>
+                        <p>@item.Title</p>
+                        <a asp-controller="shop" asp-action="index">Shop Now</a>
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</section>
+
+<!-- Exclusive Products -->
+<section class="hider card-section g-0">
+    <div class="container-md container-fluid isotope-cards g-0">
+        <!--Start Card Header -->
+        <div class="row g-0">
+            <div class="cards-title">
+                <h1>@Model.Universals.Where(s => s.Section == "Exclusive").FirstOrDefault().Title</h1>
+            </div>
+        </div>
+        <div class="cards-links">
+            <ul class="nav justify-content-center">
+
+                @foreach (var item in Model.Categories)
+                {
+
+                    var array = item.Name.Split(" ");
+                    string datafilter = string.Join("-", array).ToLower();
+
+                    <li class="nav-item" data-filter="@datafilter">
+                        <a class="nav-link">@item.Name</a>
+                    </li>
+                }
+            </ul><div class="
+            row
+            d-flex
+            justify-content-center
+            row-cols-1 row-cols-md-2 row-cols-sx-2
+            align-items-baseline
+            flex-sm-row
+            g-0
+            card-items
+          ">
+                <!-- item -->
+                @foreach (var item in Model.Products.Where(a=>a.AllInfoToProducts.Any(a=>a.Quantity > 0)))
+                {
+                    var categoryClass = item.Category.Name.Split(" ");
+                    string datafilterClass = string.Join("-", categoryClass).ToLower();
+
+                    <div class="card m-2 my-3 item @datafilterClass">
+                        <div class="product-image-box">
+                            @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                            {
+                                @if (item.AllInfoToProducts.Any(d => d.DiscountPrice > 0))
+                                {
+                                    <span class="discount">
+                                        -@(Decimal.Round(((1 - item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice / item.AllInfoToProducts.FirstOrDefault().Price) * 100)))%
+                                    </span>
+                                }
+                            }
+
+
+                            <div class="product-img">
+                                @if (Model.ProductImages.Any(i => i.ProductId == item.Id))
+                                {
+                                    <img src="~/Uploads/Images/Product/@item.ProductImages.FirstOrDefault().Image"
+                                         class="card-img-top"
+                                         alt="..." />
+                                }
+                            </div>
+
+                            <div class="image-buttons">
+                                <ul>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1"  title="Add to card"
+                                           class="add-to-card-index-btn">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="Go details"
+                                           asp-controller="shop" asp-action="details" asp-route-id="@item.Id">
+                                            <i class="fas fa-search-plus"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1"  title="Add to wishlist"
+                                           class="add-to-wishlist-index-btn">
+                                            <i class="fas fa-heart"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="product-title"><a asp-controller="shop" asp-action="details" asp-route-id="@item.Id">@(item.Name != null?item.Name:"")</a></h5>
+                            <div class="price-box">
+                                @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                                {
+
+                                    @if (item.AllInfoToProducts.Any(d => d.DiscountPrice > 0))
+                                    {
+                                        <span class="old-price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                        <span class="price"> $@item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                    }
+                                }
+                            </div>
+                            <div class="rating-box">
+                                @{
+                                    int ratingSum = 0;
+                                    int ratingCount = 0;
+                                    int ratingAverage = 0;
+                                    foreach (var product in Model.Comments.Where(p => p.ProductId == item.Id))
+                                    {
+                                        ratingSum += product.Rating;
+                                        ratingCount++;
+                                    }
+                                    if (ratingCount != 0)
+                                    {
+                                        ratingAverage = ratingSum / ratingCount;
+
+                                    }
+                                    else
+                                    {
+                                        ratingAverage = 0;
+                                    }
+
+
+                                    <div class="stars">
+                                        @for (int i = 0; i < ratingAverage; i++)
+                                        {
+                                            <span><i class="fas fa-star"></i></span>
+
+                                        }
+                                        @for (int i = 0; i < (5 - ratingAverage); i++)
+                                        {
+                                            <span><i class="far fa-star"></i></span>
+
+                                        }
+                                    </div>
+
+                                }
+
+
+                                <div class="rating px-2">
+                                    <span class="raiting-number">(@ratingCount)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+        <!-- End Card Header -->
+    </div>
+</section>
+
+<!-- Trends -->
+<section class="trends">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            @foreach (var item in Model.Advertisements.Where(s => s.Section == "Trend"))
+            {
+                <div class="news col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-5">
+                    <span>@item.UpTitle</span>
+                    <h1 class="mb-3">@item.Title</h1>
+                    <p class="mb-4">@item.DownTitle</p>
+                    <a asp-controller="shop" asp-action="index" class="close animate-button">Shop Now</a>
+                </div>
+                <div class="
+                picture-news
+                col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6
+                ">
+                    <img src="~/Uploads/Images/@item.Image"
+                         width="460"
+                         height="420"
+                         alt="Image" />
+                </div>
+            }
+
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="hider card-section g-0">
+    <div class=" container-fluid  owl-carousel-cards g-0">
+        <!--Start Card Header -->
+        <div class="row g-0 pb-3">
+            <div class="cards-title">
+                <h1>@Model.Universals.Where(s => s.Section == "Featured").FirstOrDefault().Title</h1>
+            </div>
+        </div>
+
+        <!-- End Card Header -->
+        <div class="
+            row
+            g-0
+            owl-card-items
+            d-flex
+          ">
+
+            <div id="owl-demo" data-owlCarousel class="owl-cards col-10 order-2 owl-carousel d-flex owl-theme">
+                @foreach (var item in Model.Products.Where(a => a.AllInfoToProducts.Any(a => a.Quantity > 0)))
+                {
+                    var categoryClass = item.Category.Name.Split(" ");
+                    string datafilterClass = string.Join("-", categoryClass).ToLower();
+
+                    <div class="m-2 my-3 item">
+
+                        <div class="product-image-box">
+                            @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                            {
+                                @if (item.AllInfoToProducts.Any(d => d.DiscountPrice > 0))
+                                {
+                                    <span class="discount">
+                                        -@(Decimal.Round(((1 - item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice / item.AllInfoToProducts.FirstOrDefault().Price) * 100)))%
+                                    </span>
+                                }
+                            }
+
+
+                            <div class="product-img">
+                                @if (Model.ProductImages.Any(i => i.ProductId == item.Id))
+                                {
+                                    <img src="~/Uploads/Images/Product/@item.ProductImages.FirstOrDefault().Image"
+                                         class="card-img-top"
+                                         alt="..." />
+                                }
+                            </div>
+
+                            <div class="image-buttons">
+                                <ul>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to card"
+                                           class="add-to-card-index-btn">
+                                            <i class="fas fa-shopping-cart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a title="Go details"
+                                           asp-controller="shop" asp-action="details" asp-route-id="@item.Id">
+                                            <i class="fas fa-search-plus"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-id="@(item.AllInfoToProducts.FirstOrDefault() != null ? item.AllInfoToProducts.FirstOrDefault().Id : 0)" data-quantity="1" title="Add to wishlist"
+                                           class="add-to-wishlist-index-btn">
+                                            <i class="fas fa-heart"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="product-title"><a asp-controller="shop" asp-action="details" asp-route-id="@item.Id">@(item.Name != null?item.Name:"")</a></h5>
+                            <div class="price-box">
+                                @if (Model.AllInfoToProducts.Any(p => p.ProductId == item.Id))
+                                {
+
+                                    @if (item.AllInfoToProducts.Any(d => d.DiscountPrice > 0))
+                                    {
+                                        <span class="old-price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                        <span class="price"> $@item.AllInfoToProducts.FirstOrDefault(d => d.DiscountPrice > 0).DiscountPrice</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="price">$@(item.AllInfoToProducts.FirstOrDefault(p=>p.ProductId == item.Id).Price != 0? item.AllInfoToProducts.FirstOrDefault().Price:0)</span>
+                                    }
+                                }
+                            </div>
+                            <div class="rating-box">
+                                @{
+                                    int ratingSum = 0;
+                                    int ratingCount = 0;
+                                    int ratingAverage = 0;
+                                    foreach (var product in Model.Comments.Where(p => p.ProductId == item.Id))
+                                    {
+                                        ratingSum += product.Rating;
+                                        ratingCount++;
+                                    }
+                                    if (ratingCount != 0)
+                                    {
+                                        ratingAverage = ratingSum / ratingCount;
+
+                                    }
+                                    else
+                                    {
+                                        ratingAverage = 0;
+                                    }
+
+
+                                    <div class="stars">
+                                        @for (int i = 0; i < ratingAverage; i++)
+                                        {
+                                            <span><i class="fas fa-star"></i></span>
+
+                                        }
+                                        @for (int i = 0; i < (5 - ratingAverage); i++)
+                                        {
+                                            <span><i class="far fa-star"></i></span>
+
+                                        }
+                                    </div>
+
+                                }
+
+
+                                <div class="rating px-2">
+                                    <span class="raiting-number">(@ratingCount)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+
+            <div class="prev owl-arrow col-1 order-1">
+                <a id="owl-prev"><i class='fas fa-chevron-left fa-2x'></i></a>
+            </div>
+
+            <div class="next  owl-arrow col-1 order-3 ms-auto">
+                <a id="owl-next"><i class='fas fa-chevron-right fa-2x'></i></a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<partial name="_TestimonialPartial" model="@Model" />
+
+<!-- Partners -->
+<partial name="_PartnersPartial" model="@Model.Partners" />
+
+

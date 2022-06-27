@@ -1,0 +1,71 @@
+﻿@model AllInfoToProduct
+@{
+    ViewData["Title"] = "CreateType";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Create Product's Type</h4>
+
+                    <form asp-area="admin" asp-controller="product" asp-action="CreateType" method="post" class="forms-sample" enctype="multipart/form-data">
+                        @*<div class="text-danger" asp-validation-summary="All"></div>*@
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Product's Color</label>
+                            <select asp-for="@Model.ColorId" asp-items="@(new SelectList(ViewBag.Colors, "Id","Name"))" class="form-control" id="exampleFormControlSelect2">
+                            </select>
+                            <span class="text-danger" asp-validation-for="@Model.ColorId"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Product's Size</label>
+                            <select asp-for="@Model.SizeId" asp-items="@(new SelectList(ViewBag.Sizes, "Id","Name"))" class="form-control" id="exampleFormControlSelect2">
+                            </select>
+                            <span class="text-danger" asp-validation-for="@Model.SizeId"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="@Model.Quantity" for="quantity">Product's Quantity</label>
+                            <input asp-for="@Model.Quantity"  class="form-control" id="quantity" placeholder="Quantity">
+                            <span class="text-danger" asp-validation-for="@Model.Quantity"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="@Model.Price" for="price">Product's Price</label>
+                            <input asp-for="@Model.Price" class="form-control" id="price" placeholder="Price">
+                            <span class="text-danger" asp-validation-for="@Model.Price"></span>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label asp-for="@Model.DiscountPrice" for="discountPrice">Product's Discount Price</label>
+                            <input asp-for="@Model.DiscountPrice" class="form-control" id="discountPrice" placeholder="Discount Price">
+                            <span class="text-danger" asp-validation-for="@Model.DiscountPrice"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="@Model.DiscountDeadline" for="discountDeadline">Product's Discount Deadline</label>
+                            <input asp-for="@Model.DiscountDeadline" type="date" class="form-control" id="discountDeadline" placeholder="Discount Deadline">
+                            <span class="text-danger" asp-validation-for="@Model.DiscountDeadline"></span>
+                            <input type="hidden" asp-for="@Model.ProductId" value="@(ViewBag.ProductId)" />
+                        </div>
+
+
+                        <div class="pt-2">
+                            <button type="submit" class="btn btn-success pt-2">Create</button>
+                            <button asp-area="admin" asp-controller="product" asp-action="Types" asp-route-productId="@(ViewBag.ProductId)" class="btn btn-light">Cancel</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

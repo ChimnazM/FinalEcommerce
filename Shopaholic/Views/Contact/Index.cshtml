@@ -1,0 +1,96 @@
+﻿@model VmContact
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<!--Bread Crumb-->
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Contact Us</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="home" asp-action="index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Contact Us</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--Contact Infos-->
+<section class="contact">
+    <div class="container">
+        <div class="row contact-row g-0">
+            <div class="col-md-6">
+                <div class="contact-header">
+                    <h1>@Model.ContactInfo.Title</h1>
+                    @Html.Raw(Model.ContactInfo.Desc)
+                </div>
+                <div class="contact-form">
+                    <form asp-controller="contact" asp-action="index" method="post">
+                        <div class="row g-0 pb-1 m-0 text text-danger" asp-validation-summary="All"></div>
+                        @if (!SignInManager.IsSignedIn(User))
+                        {
+                            <div class="row g-0">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="Name" class="form-control" id="name1" type="text" placeholder="Your Name:" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="Surname" class="form-control" id="surname1" type="text" placeholder="Your Surname:" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-0">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="Email" class="form-control" id="email1" type="email" placeholder="Your Email:" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="Phone" data-mask="(000) 000 00 00" class="form-control" id="phone" type="tel" placeholder="Your Phone:">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="row g-0">
+                            <div class="col-12">
+                                <div class="form-group pb-3">
+                                    <textarea asp-for="Message" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false" placeholder="Your Message"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-6 py-3">
+                                <div class="form-group">
+                                    <button type="submit" class="close animate-button">Send Message</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="contact-map">
+                    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="%3$s" aria-label="%3$s" src="https://maps.google.com/maps?q=London%20Eye%2C%20London%2C%20United%20Kingdom&amp;t=m&amp;z=13&amp;output=embed&amp;iwloc=near"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

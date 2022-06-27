@@ -1,0 +1,59 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<section class="testimonial">
+    <div class="container-fluid main-cont">
+        <div class="container nestesd-cont">
+            <div class="row align-items-center g-0">
+
+                <div class="col-lg-4 testimonial-content">
+                    <span>@Model.Testimonial.UpTitle</span>
+                    <h2>@Model.Testimonial.Title</h2>
+                    <p class="mb-lg-0">@Html.Raw(Model.Testimonial.Info)</p>
+                </div>
+
+                <div class="col-lg-8 testimonial-carousel-main">
+                    <div class="testimonial-owl-carousel">
+                        <div id="owl-tes" class="owl-stage">
+
+                            @foreach (var item in Model.Feedbacks)
+                            {
+                                <div class="tes-owl-item">
+                                    <div class="author-main">
+                                        <div class="author-image">
+                                            @if (item.Image != "")
+                                            {
+                                                <img src="~/Uploads/Images/@item.Image" alt="">
+                                            }
+                                            else
+                                            {
+                                                //This's can be any people when picture is empty
+                                                <img src="~/img/profile.png" alt="">
+                                            }
+
+                                        </div>
+                                        <div class="author-info">
+                                            <h6>@(item.FullName!= null? item.FullName:"")</h6>
+                                            <span>@(item.Proffession !=null? item.Proffession:"")</span>
+                                        </div>
+                                    </div>
+                                    <div class="author-message">
+                                        <p>@Html.Raw(item.Text != null ? item.Text : "")</p>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+                        <div class="owl-nav">
+                            <div id="testimonial-prev" class="tes-arrow"><a><i class='fas fa-chevron-left'></i></a></div>
+                            <div id="testimonial-next" class="tes-arrow"><a><i class='fas fa-chevron-right'></i></a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

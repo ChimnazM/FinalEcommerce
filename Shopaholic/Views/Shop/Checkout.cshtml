@@ -1,0 +1,201 @@
+﻿@model VmCheckout
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="bread-crumb">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-6">
+                    <div class="page-title">
+                        <h1>Checkout</h1>
+                    </div>
+                </div>
+                <div class="col-md-6 g-0">
+                    <ol class="breadcrumb justify-content-md-end">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="shop" asp-action="cart">Cart</a>
+                        </li>
+                        <li class="breadcrumb-item active">Checkout</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="checkout">
+    <div class="container">
+        <div class="row checkout-row g-0">
+            <div class="col-md-6">
+                <div class="checkout-header">
+                    <h1>Billing Details</h1>
+                    @if (!SignInManager.IsSignedIn(User))
+                    {
+                        <p>After this process you can login by using your e-mail address and password *</p>
+                    }
+                </div>
+                <div class="checkout-form">
+                    <form asp-controller="shop" asp-action="checkout" method="post">
+                        <div class="row g-0 pb-1 m-0 text text-danger" asp-validation-summary="All"></div>
+                        <div class="row g-0">
+                            @if (!SignInManager.IsSignedIn(User))
+                            {
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="@Model.Name" class="form-control" id="name" type="text" placeholder="Your Name:" required name="Name">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="@Model.Surname" class="form-control" id="surname" type="text" placeholder="Your Surname:" required name="Surname">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="@Model.Email" class="form-control" id="email" type="email" placeholder="Your Email:" required name="Email">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group pb-3">
+                                        <input asp-for="@Model.Password" class="form-control" id="password" type="password" placeholder="Your Password:" required name="Password">
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+
+                        <p>Address:</p>
+                        <div class="row g-0">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <select asp-for="@Model.CountryId" asp-items="@(new SelectList(ViewBag.Country,"Id","Name"))" class="form-select" id="selectlistitems" aria-label="Default select example">
+                                    </select>
+                                </div>
+                                <span class="text text-danger" asp-validation-for="@Model.CountryId"></span>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.State" class="form-control" id="state" type="text" placeholder="State:" name="State">
+                                </div>
+                                <span class="text text-danger" asp-validation-for="@Model.State"></span>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.Phone" data-mask="(000) 000 00 00" class="form-control" id="phone" type="tel" placeholder="Your Phone:" name="Phone">
+                                </div>
+                                <span class="text text-danger" asp-validation-for="@Model.Phone"></span>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.Zipcode" class="form-control" id="zipcode" type="text" placeholder="Zipcode:" name="Zipcode">
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>Card Details:</p>
+                        <div class="row g-0">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.CardName" class="form-control" id="cardname" type="text" placeholder="Card Name:" name="CardName">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.CardNumber" data-mask="0000 0000 0000 0000" class="form-control" id="cardnumber" type="text" placeholder="Card Number:" name="CardNumber">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-0">
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.CardDate" data-mask="00/00" class="form-control" id="carddate" type="text" placeholder="Date:" name="CardDate">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group pb-3">
+                                    <input asp-for="@Model.SecurityCode" data-mask="000" class="form-control" id="SecurityCode" type="text" placeholder="CVC:" name="SecurityCode">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row g-0">
+                            <div class="col-6 py-3">
+                                <div class="form-group">
+                                    <button asp-controller="shop" asp-action="checkout" type="submit" class="close animate-button">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="checkout-calculation">
+                    <h4>Your Order</h4>
+                    <div class="checkout-calculation-table">
+                        <table class="table shop_table woocommerce-checkout-review-order-table">
+                            <thead>
+                                <tr>
+                                    <th class="product-name">Product</th>
+                                    <th class="product-total">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.SaleProduts)
+                                {
+                                    <tr class="cart_item">
+
+                                        <td class="product-name">
+                                            @item.Name <strong class="product-quantity">× @item.Quantity</strong>
+                                        </td>
+                                        <td class="product-total">
+                                            <span class="amount">$@((item.Quantity * item.Price).ToString("0.00"))</span>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="cart-subtotal">
+                                    <th>Shipping</th>
+                                    <td><span id="shipping-price" class="amount">@(Model.ShippingPrice != 0 ? "$" + Model.ShippingPrice.ToString("0.00"):"Free")</span></td>
+                                </tr>
+                                <tr class="cart-subtotal">
+                                    <th>Tax</th>
+                                    @if (Model.SubTotal < Model.Tax.PriceLimit)
+                                    {
+                                        <td><span class="amount">$@((Model.SubTotal * Model.Tax.Percent / 100).ToString("0.00"))</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="amount">$0.00</span></td>
+                                    }
+                                </tr>
+                                <tr class="cart-subtotal">
+                                    <th>Total</th>
+                                    @if (Model.SubTotal < Model.Tax.PriceLimit)
+                                    {
+                                        <td><span class="amount checkout-subtotal">$@((Model.SubTotal + (Model.SubTotal * Model.Tax.Percent / 100) + Model.ShippingPrice).ToString("0.00"))</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span  class="amount checkout-subtotal">$@((Model.SubTotal + Model.ShippingPrice).ToString("0.00"))</span></td>
+                                    }
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
